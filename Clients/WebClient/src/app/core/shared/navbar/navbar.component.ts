@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { UserService } from '../../services/user.service';
-import { config } from '../../services/configuration.service';
-import { ChatService } from '../../services/chat.service';
-
 import { User } from '../../models/user.model';
+
+import { UserService } from '../../services/user.service';
+import { ChatService } from '../../services/chat.service';
+import { config } from '../../services/configuration.service';
+
 import { fontVariables } from '../../models/font.model';
 const { fonts, url: fontUrl, css: fontCss, withoutCss } = fontVariables;
 
