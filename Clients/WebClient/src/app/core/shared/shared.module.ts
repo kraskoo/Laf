@@ -19,13 +19,15 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { BadRequestComponent } from './bad-request/bad-request.component';
 @NgModule({
   declarations: [
     NavbarComponent,
     FooterComponent,
     HomeComponent,
     NotFoundComponent,
-    UnauthorizedComponent
+    UnauthorizedComponent,
+    BadRequestComponent
   ],
   imports: [
     CommonModule,

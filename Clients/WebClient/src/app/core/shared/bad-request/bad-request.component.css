@@ -1,0 +1,12 @@
+h1 {
+  padding-top: 2vh;
+  padding-bottom: 3vh;
+}
+
+h1, p {
+  text-align: center;
+}
+
+p {
+  color: red;
+}

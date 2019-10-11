@@ -19,8 +19,8 @@ export class AppHttpInterceptor implements HttpInterceptor {
     return next.handle(req.clone({
       url: `${apiUrl}/${req.url}`
     })).pipe(catchError((err: HttpErrorResponse) => {
-      if (err.status !== 200) {
-        this.router.navigate([ '/not-found' ]);
+      if (err.status >= 400) {
+        this.router.navigate([ '/bad-request', err.message ]);
       }
 
       return throwError(err);

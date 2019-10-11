@@ -17,8 +17,7 @@ export class LoginComponent {
   constructor(
     private userService: UserService,
     private accountService: AccountService,
-    private router: Router
-  ) { }
+    private router: Router) { }
 
   onSubmit(form: NgForm): void {
     if (form.valid) {
