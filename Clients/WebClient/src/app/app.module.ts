@@ -9,9 +9,7 @@ import { SharedModule } from './core/shared/shared.module';
 import { AppHttpInterceptor } from './core/interceptors/app-http.interceptor';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

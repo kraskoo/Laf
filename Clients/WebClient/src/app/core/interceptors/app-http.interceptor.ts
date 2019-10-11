@@ -12,14 +12,10 @@ export class AppHttpInterceptor implements HttpInterceptor {
   constructor(private router: Router) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    if (req.url.endsWith('upload/images')) {
-      return next.handle(req);
-    }
-
     return next.handle(req.clone({
       url: `${apiUrl}/${req.url}`
     })).pipe(catchError((err: HttpErrorResponse) => {
-      if (err.status >= 400) {
+      if (err.status !== 200) {
         this.router.navigate([ '/bad-request', err.message ]);
       }
 
