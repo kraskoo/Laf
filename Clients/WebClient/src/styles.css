@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+}
+
+main, .main {
+  min-height: calc(100vh - 128px) !important;
+}
+
+html, body {
+  height: 100%;
+}
+
+.inner {
+  margin: 0 1vw 3vh 1vw;
+  padding-top: 3vh;
+}
+
+.sides-15 {
+  margin: auto 15vw;
+}
+
+.sides-25 {
+  margin: auto 25vw;
+}
+
+.field-width {
+  width: 100%;
+}
+
+.centred-text {
+  text-align: center;
+}

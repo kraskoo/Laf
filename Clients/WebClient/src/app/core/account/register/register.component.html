@@ -1,0 +1,30 @@
+<div class="sides-25">
+  <h1 class="centred-text">Registration Form</h1>
+  <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+    <mat-form-field class="field-width">
+      <input type="text" name="firstName" matInput placeholder="First Name" #firstName="ngModel" ngModel required>
+      <mat-error *ngIf="firstName?.touched && firstName?.invalid">First name must contains only latin alphabets and must be in range [3.. 35]</mat-error>
+    </mat-form-field>
+    <mat-form-field class="field-width">
+      <input type="text" name="lastName" matInput placeholder="Last Name" #lastName="ngModel" ngModel required>
+      <mat-error *ngIf="lastName?.touched && lastName?.invalid">Last name must contains only latin alphabets and must be in range [3.. 35]</mat-error>
+    </mat-form-field>
+    <mat-form-field class="field-width">
+      <input type="email" name="email" matInput placeholder="Email" #email="ngModel" ngModel required>
+      <mat-error *ngIf="email?.touched && email?.invalid">You must provide valid email address</mat-error>
+    </mat-form-field>
+    <mat-form-field class="field-width">
+      <input type="password" name="password" matInput placeholder="Password" #password="ngModel" ngModel required>
+      <mat-error *ngIf="password?.touched && password?.invalid">Password must contains only latin alphabets and/or numbers</mat-error>
+    </mat-form-field>
+    <mat-form-field class="field-width">
+      <input type="password" name="passwordConfirmation" matInput placeholder="Confirm Password" #passwordConfirmation="ngModel" ngModel required>
+      <mat-error *ngIf="passwordConfirmation?.touched && password?.touched && password?.value !== passwordConfirmation?.value">Passwords must match!</mat-error>
+    </mat-form-field>
+    <br />
+    <button type="submit"
+            mat-raised-button color="primary"
+            [disabled]="!f.touched || f.invalid || f.value?.password !== f.value?.passwordConfirmation">Register</button>
+  </form>
+</div>
+<spinner *ngIf="isLoading"></spinner>

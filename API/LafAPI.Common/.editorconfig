@@ -1,0 +1,16 @@
+﻿[*.cs]
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = none
+
+# IDE0022: Use block body for methods
+csharp_style_expression_bodied_methods = false:none
+
+# IDE0055: Fix formatting
+dotnet_diagnostic.IDE0055.severity = none
+
+# SA1413: Use trailing comma in multi-line initializers
+dotnet_diagnostic.SA1413.severity = none
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none

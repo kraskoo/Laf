@@ -1,0 +1,21 @@
+<div class="container" *ngIf="isInChatRoom">
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #sn (sideNav)="sn" [mode]="'side'" fixedTopGap="56">
+      <ng-template [ngIf]="friends.friends.length > 0">
+        <chat-friends-list [title]="'Friends'" [list]="friends.friends"></chat-friends-list>
+      </ng-template>
+      <ng-template [ngIf]="friends.awaitableFriends.length > 0">
+        <chat-friends-list [title]="'Awaitable Friends'" [list]="friends.awaitableFriends"></chat-friends-list>
+      </ng-template>
+      <ng-template [ngIf]="friends.invitations.length > 0">
+        <chat-friends-list [title]="'Invitations'" [list]="friends.invitations"></chat-friends-list>
+      </ng-template>
+      <ng-template [ngIf]="friends.invitedFriends.length > 0">
+        <chat-friends-list [title]="'Invited Friends'" [list]="friends.invitedFriends"></chat-friends-list>
+      </ng-template>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <chat-base-content></chat-base-content>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

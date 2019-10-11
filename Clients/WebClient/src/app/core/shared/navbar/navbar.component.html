@@ -1,0 +1,79 @@
+<mat-toolbar color="primary" [class.mat-elevation-z2]="true" role="heading">
+  <mat-toolbar-row>
+    <ng-template [ngIf]="isInChatRoom">
+      <button mat-icon-button (click)="clickSideNav()" matTooltip="Friends list" [matTooltipPosition]="'below'"
+        aria-label="Button that displays a tooltip in various positions">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </ng-template>
+    <ng-template [ngIf]="hasLoggedinUser && !isInChatRoom">
+      <a mat-button routerLink="/chat">Chat</a>
+    </ng-template>
+    <a mat-button routerLink="/">Home</a>
+    <span class="spacer"></span>
+    <button mat-button [matMenuTriggerFor]="fontMenu" matTooltip="Font selector" [matTooltipPosition]="'below'"
+      aria-label="Button that displays a tooltip in various positions">
+      <mat-icon aria-hidden="false" aria-label="Font icon">font_download</mat-icon>
+    </button>
+    <mat-menu #fontMenu="matMenu" yPosition="below">
+      <button mat-menu-item *ngFor="let font of fontKeys" (click)="changeFont(font)">
+        <ng-template [ngIf]="font === fontKey">
+          <strong>{{font}}</strong>
+        </ng-template>
+        <ng-template [ngIf]="font !== fontKey">
+          {{font}}
+        </ng-template>
+      </button>
+    </mat-menu>
+    <button mat-button [matMenuTriggerFor]="themeMenu" matTooltip="Theme selector" [matTooltipPosition]="'below'"
+      aria-label="Button that displays a tooltip in various positions">
+      <mat-icon aria-hidden="false" aria-label="Theme icon">format_color_fill</mat-icon>
+    </button>
+    <mat-menu #themeMenu="matMenu">
+      <mat-grid-list cols="2" rowHeight="50px">
+        <mat-grid-tile role="menuitem">
+          <button mat-mini-fab style="background: rgb(103, 58, 183);" color="primary"
+            (click)="changeTheme('deeppurple-amber')">
+            <mat-icon aria-hidden="false" aria-label="Check Icon"
+              *ngIf="!isChangeTheme && isMyColor('deeppurple-amber')">check
+            </mat-icon>
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile role="menuitem">
+          <button mat-mini-fab style="background: rgb(63, 81, 181);" color="primary"
+            (click)="changeTheme('indigo-pink')">
+            <mat-icon aria-hidden="false" aria-label="Check Icon" *ngIf="!isChangeTheme && isMyColor('indigo-pink')">
+              check</mat-icon>
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile role="menuitem">
+          <button mat-mini-fab style="background: rgb(233, 30, 99);" color="primary"
+            (click)="changeTheme('pink-bluegrey')">
+            <mat-icon aria-hidden="false" aria-label="Check Icon" *ngIf="!isChangeTheme && isMyColor('pink-bluegrey')">
+              check</mat-icon>
+          </button>
+        </mat-grid-tile>
+        <mat-grid-tile role="menuitem">
+          <button mat-mini-fab style="background: rgb(156, 39, 176);" color="primary"
+            (click)="changeTheme('purple-green')">
+            <mat-icon aria-hidden="false" aria-label="Check Icon" *ngIf="!isChangeTheme && isMyColor('purple-green')">
+              check</mat-icon>
+          </button>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-menu>
+    <ng-template [ngIf]="!hasLoggedinUser">
+      <a mat-button routerLink="/account/register">Register</a>
+      <a mat-button routerLink="/account/login">Login</a>
+    </ng-template>
+    <ng-template [ngIf]="hasLoggedinUser">
+      <button mat-button [matMenuTriggerFor]="userMenu" matTooltip="{{user.firstName}} {{user.lastName}}"
+        [matTooltipPosition]="'below'" aria-label="Button that displays a tooltip in various positions">
+        <mat-icon aria-hidden="false" aria-label="Account icon">account_circle</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item (click)="logout()">Logout</button>
+      </mat-menu>
+    </ng-template>
+  </mat-toolbar-row>
+</mat-toolbar>

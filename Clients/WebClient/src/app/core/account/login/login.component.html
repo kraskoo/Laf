@@ -1,0 +1,17 @@
+<div class="sides-25">
+  <h1 class="centred-text">Login Form</h1>
+  <form (ngSubmit)="onSubmit(f)" #f="ngForm">    
+    <mat-form-field class="field-width">
+      <input type="email" name="email" matInput placeholder="Email" #email="ngModel" ngModel required>
+      <mat-error *ngIf="email?.touched && email?.invalid">You must provide valid email address</mat-error>
+    </mat-form-field>
+    <mat-form-field class="field-width">
+      <input type="password" name="password" matInput placeholder="Password" #password="ngModel" ngModel required>
+      <mat-error *ngIf="password?.touched && password?.invalid">Password must contains only latin alphabets and/or numbers</mat-error>
+    </mat-form-field>
+    <button type="submit"
+            mat-raised-button color="primary"
+            [disabled]="!f.touched || f.invalid || email?.invalid || password?.invalid">Login</button>
+  </form>
+</div>
+<spinner *ngIf="isLoading"></spinner>

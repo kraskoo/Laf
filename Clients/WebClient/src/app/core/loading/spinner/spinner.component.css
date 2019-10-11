@@ -1,0 +1,14 @@
+.spinner {
+  position: absolute;
+  top: calc(50% - 125px);
+  left: calc(50% - 125px);
+}
+
+#overlay-spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.65);
+}

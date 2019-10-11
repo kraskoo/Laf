@@ -1,0 +1,34 @@
+﻿[*.cs]
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = none
+
+# SA1128: Put constructor initializers on their own line
+dotnet_diagnostic.SA1128.severity = none
+
+# SA1413: Use trailing comma in multi-line initializers
+dotnet_diagnostic.SA1413.severity = none
+
+# SA1515: Single-line comment should be preceded by blank line
+dotnet_diagnostic.SA1515.severity = none
+
+# SA1633: File should have header
+dotnet_diagnostic.SA1633.severity = none
+
+# IDE0061: Use block body for local functions
+csharp_style_expression_bodied_local_functions = false:none
+
+# IDE0062: Make local function 'static'
+csharp_prefer_static_local_function = true:none
+
+# IDE0003: Remove qualification
+dotnet_style_qualification_for_property = false:none
+
+# IDE0003: Remove qualification
+dotnet_style_qualification_for_method = false:none
+
+# IDE0003: Remove qualification
+dotnet_style_qualification_for_field = false:none
+
+# IDE0003: Remove qualification
+dotnet_style_qualification_for_event = false:none

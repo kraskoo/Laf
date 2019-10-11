@@ -1,0 +1,40 @@
+mat-sidenav {
+  min-width: 200px;
+}
+
+mat-sidenav-container {
+  height: calc(94vh - 128px) !important;
+}
+
+mat-drawer-content {
+  height: calc(94vh - 128px) !important;
+}
+
+mat-drawer {
+	background-color: #eeeeee;
+	color: #000;
+	width: 15%;
+}
+
+.menu-button {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1000 !important;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.sidenav-container {
+  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+     causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+  flex: 1;
+}
