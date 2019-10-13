@@ -22,14 +22,16 @@ import { MainChatComponent } from './main-chat/main-chat.component';
 
 import { ChatRoutingModule } from './chat-routing.module';
 import { FriendsListComponent } from './friends-list/friends-list.component';
-import { BaseContentComponent, UserResultComponent } from './base-content/base-content.component';
+import { BaseContentComponent } from './base-content/base-content.component';
+import { InvitationsComponent, UserResultComponent } from './invitations/invitations.component';
 
 @NgModule({
   declarations: [
     MainChatComponent,
     FriendsListComponent,
     BaseContentComponent,
-    UserResultComponent
+    UserResultComponent,
+    InvitationsComponent
   ],
   imports: [
     CdkTableModule,

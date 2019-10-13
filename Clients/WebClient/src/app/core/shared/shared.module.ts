@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  MatBadgeModule,
   MatCommonModule,
   MatMenuModule,
   MatGridListModule,
@@ -37,6 +38,7 @@ import { ThemeComponent } from './theme/theme.component';
   imports: [
     CommonModule,
     AppRoutingModule,
+    MatBadgeModule,
     MatCommonModule,
     MatMenuModule,
     MatGridListModule,

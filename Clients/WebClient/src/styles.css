@@ -35,7 +35,24 @@ html, body {
   flex: 1 1 auto;
 }
 
-#flmfb > span {
-  display: contents;
-  width: 100%;
+.flmfb {
+  display: flex;
+  padding: 3px 8px;
+  align-items: flex-start;
+  font-weight: 500;
+  font-family: 'Roboto';
+  font-size: 14px;
+}
+
+.flmfb > span {
+  display: flex;
+  line-height: 36px;
+}
+
+.block {
+  display: block;
+}
+
+.block > figure {
+  display: inherit !important;
 }

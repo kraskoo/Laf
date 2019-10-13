@@ -1,0 +1,78 @@
+<mat-grid-list cols="4" rowHeight="9.05vh">
+  <mat-grid-tile colspan="4" rowspan="1">
+    <form class="form" #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <mat-form-field class="full-width">
+        <input type="text" matInput placeholder="Search for new friend" name="search" ngModel #search="ngModel">
+        <button type="submit" matSuffix mat-icon-button matTooltip="Search ..." [matTooltipPosition]="'after'"
+          aria-label="Button that displays a tooltip in various positions" [disabled]="search.value?.length === 0">
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </form>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="1" rowspan="7" class="block">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <p>Friends:</p>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <ng-template [ngIf]="(friends$ | async)?.friends.length > 0">
+      <mat-nav-list *ngFor="let friend of (friends$ | async)?.friends">
+        <div class="flmfb">
+          <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
+          <span class="spacer"></span>
+          <button mat-raised-button class="red">Block</button>
+        </div>
+      </mat-nav-list>
+    </ng-template>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="1" rowspan="7" class="block">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <p>Awaitable Friends</p>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <ng-template [ngIf]="(friends$ | async)?.awaitableFriends.length > 0">
+      <mat-nav-list *ngFor="let friend of (friends$ | async)?.awaitableFriends">
+        <div class="flmfb">
+          <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
+          <span class="spacer"></span>
+          <button mat-raised-button>Block</button>
+        </div>
+      </mat-nav-list>
+    </ng-template>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="1" rowspan="7" class="block">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <p>Invitations</p>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <ng-template [ngIf]="(friends$ | async)?.invitations.length > 0">
+      <mat-nav-list *ngFor="let friend of (friends$ | async)?.invitations">
+        <div class="flmfb">
+          <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
+          <span class="spacer"></span>
+          <button mat-raised-button class="green" (click)="acceptFriend(friend.id)">Accept</button>&nbsp;
+          <button mat-raised-button class="red">Reject</button>
+        </div>
+      </mat-nav-list>
+    </ng-template>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="1" rowspan="7" class="block">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <p>Invited Friends</p>
+      </mat-toolbar-row>
+    </mat-toolbar>
+    <ng-template [ngIf]="(friends$ | async)?.invitedFriends.length > 0">
+      <mat-nav-list *ngFor="let friend of (friends$ | async)?.invitedFriends">
+        <div class="flmfb">
+          <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
+          <span class="spacer"></span>
+          <button mat-raised-button class="red">Drop</button>
+        </div>
+      </mat-nav-list>
+    </ng-template>
+  </mat-grid-tile>
+</mat-grid-list>

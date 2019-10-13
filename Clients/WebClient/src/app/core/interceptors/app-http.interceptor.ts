@@ -1,17 +1,30 @@
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse } from '@angular/common/http';
-import { throwError } from 'rxjs';
+import { throwError, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
+import { UserService } from '../services/user.service';
 
 const apiUrl = environment.apiURL;
 
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
-  constructor(private router: Router) { }
+  constructor(
+    private userService: UserService,
+    private router: Router) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
+    if (!req.url.endsWith('/login') && !req.url.endsWith('/register')) {
+      const expiresIn = this.userService.user.expiresIn;
+      const sessionExpired = new Date(Date.now()) > new Date(Date.now() + expiresIn);
+      if (sessionExpired) {
+        this.userService.removeUser();
+        this.router.navigate([ '/account/login' ]);
+        return of(null as any);
+      }
+    }
+
     return next.handle(req.clone({
       url: `${apiUrl}/${req.url}`
     })).pipe(catchError((err: HttpErrorResponse) => {

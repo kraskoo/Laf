@@ -1,10 +1,12 @@
 <mat-toolbar color="primary" [class.mat-elevation-z2]="true" role="heading">
   <mat-toolbar-row>
     <ng-template [ngIf]="isInChatRoom">
-      <button mat-icon-button (click)="clickSideNav()" matTooltip="Friends list" [matTooltipPosition]="'below'"
-        aria-label="Button that displays a tooltip in various positions">
+      <button mat-icon-button (click)="clickSideNav()" matTooltip="Friends list" [matTooltipPosition]="'below'">
         <mat-icon>menu</mat-icon>
       </button>
+      <a mat-icon-button routerLink="/chat/invitations" matTooltip="Invitations" [matTooltipPosition]="'below'">
+        <mat-icon matBadge="15" matBadgeColor="warn">face</mat-icon>
+      </a>
     </ng-template>
     <ng-template [ngIf]="hasLoggedinUser && !isInChatRoom">
       <a mat-button routerLink="/chat">Chat</a>
@@ -18,8 +20,7 @@
       <a mat-button routerLink="/account/login">Login</a>
     </ng-template>
     <ng-template [ngIf]="hasLoggedinUser">
-      <button mat-button [matMenuTriggerFor]="userMenu" matTooltip="{{user.firstName}} {{user.lastName}}"
-        [matTooltipPosition]="'below'" aria-label="Button that displays a tooltip in various positions">
+      <button mat-button [matMenuTriggerFor]="userMenu" matTooltip="{{user.firstName}} {{user.lastName}}">
         <mat-icon aria-hidden="false" aria-label="Account icon">account_circle</mat-icon>
       </button>
       <mat-menu #userMenu="matMenu">

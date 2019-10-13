@@ -1,21 +1,5 @@
 <mat-grid-list cols="3" rowHeight="8.5vh" [gutterSize]="2">
-  <mat-grid-tile [colspan]="3" [rowspan]="1">
-    <form class="form" #f="ngForm" (ngSubmit)="onSubmit(f)">
-      <mat-form-field class="full-width">
-        <input type="text" matInput placeholder="Search for new friend" name="search" ngModel #search="ngModel">
-        <button type="submit"
-                matSuffix
-                mat-icon-button
-                matTooltip="Search ..."
-                [matTooltipPosition]="'after'"
-                aria-label="Button that displays a tooltip in various positions"
-                [disabled]="search.value?.length === 0">
-          <mat-icon>search</mat-icon>
-        </button>
-      </mat-form-field>
-    </form>
-  </mat-grid-tile>
-  <mat-grid-tile [colspan]="3" [rowspan]="7" [style.background]="'lightgreen'">
+  <mat-grid-tile [colspan]="3" [rowspan]="8" [style.background]="'lightgreen'">
     Chat
   </mat-grid-tile>
   <mat-grid-tile [colspan]="3" [rowspan]="1" [style.background]="'lightpink'">

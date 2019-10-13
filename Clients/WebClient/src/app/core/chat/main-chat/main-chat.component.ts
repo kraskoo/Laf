@@ -1,5 +1,4 @@
 import { Component, OnDestroy, ViewChild, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { MatSidenav } from '@angular/material/sidenav';
@@ -27,18 +26,9 @@ export class MainChatComponent implements OnInit, OnDestroy {
   }
 
   constructor(
-    private router: Router,
     private accountService: AccountService,
     private chatService: ChatService) {
     config.inChatPage = true;
-    // tslint:disable-next-line: only-arrow-functions
-    this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; };
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        // Trick the Router into believing it's last link wasn't previously loaded
-        this.router.navigated = false;
-      }
-    });
   }
 
   ngOnInit(): void {
@@ -49,6 +39,10 @@ export class MainChatComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     config.inChatPage = false;
+  }
+
+  clickClose() {
+    this.chatService.clickMenu();
   }
 
   selectUser(fl: FriendsListComponent) {

@@ -25,7 +25,7 @@ export class LoginComponent {
       const email = form.value.email;
       const password = form.value.password;
       this.accountService.login(email, password).subscribe(user => {
-        user.expires = new Date(Date.now() + user.expiresIn);
+        user.expires = new Date(user.expiresIn);
         this.userService.addUser(user);
         this.router.navigate(['/']);
         this.isLoading = false;

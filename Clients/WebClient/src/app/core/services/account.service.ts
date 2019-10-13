@@ -60,4 +60,11 @@ export class AccountService {
     const headers = { Authorization: `Bearer ${this.userService.user.token}` };
     return this.http.post(url, body, { headers });
   }
+
+  acceptFriendship(id: string) {
+    const url = 'account/confirmfriendship';
+    const body = { id };
+    const headers = { Authorization: `Bearer ${this.userService.user.token}` };
+    return this.http.post(url, body, { headers });
+  }
 }

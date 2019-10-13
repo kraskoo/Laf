@@ -19,11 +19,12 @@ export class FriendsListComponent {
 
   constructor(private chatService: ChatService) { }
 
-  clickClose() {
+  clickMenu() {
     this.chatService.clickMenu();
   }
 
   selectUser(user: User) {
     this.selectedUser = user;
+    this.clickMenu();
   }
 }

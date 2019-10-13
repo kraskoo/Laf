@@ -1,0 +1,26 @@
+.form {
+  min-width: 200px;
+  max-width: 600px;
+  width: 100%;
+  height: 55px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-grid-tile, figure {
+  display: block;
+}
+
+.red {
+  background-color: #e53935;
+}
+
+.green, .red {
+  color: white;
+}
+
+.green {
+  background-color: #388e3c;
+}
