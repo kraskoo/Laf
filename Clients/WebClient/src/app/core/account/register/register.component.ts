@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NgForm, FormControl, Validators } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { AccountService } from '../../services/account.service';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
@@ -10,11 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  firstName = new FormControl('', [Validators.required, Validators.pattern(/[A-Z][a-z]{2,34}/g)]);
-  lastName = new FormControl('', [Validators.required, Validators.pattern(/[A-Z][a-z]{2,34}/g)]);
-  email = new FormControl('', [Validators.required, Validators.email]);
-  password = new FormControl('', [Validators.required, Validators.pattern(/[a-zA-Z0-9]{6,30}/g)]);
-  passwordConfirmation = new FormControl('', [Validators.required, Validators.pattern(/[a-zA-Z0-9]{6,30}/g)]);
+  @ViewChild('f', { static: false }) form: NgForm;
   isLoading = false;
 
   constructor(
@@ -22,17 +18,16 @@ export class RegisterComponent {
     private accountService: AccountService,
     private router: Router) { }
 
-  onSubmit(form: NgForm): void {
-    if (form.valid) {
+  onSubmit(): void {
+    if (this.form.valid) {
       this.isLoading = true;
-      const firstName = form.value.firstName;
-      const lastName = form.value.lastName;
-      const email = form.value.email;
-      const password = form.value.password;
-      const passwordConfirmation = form.value.passwordConfirmation;
+      const firstName = this.form.value.firstName;
+      const lastName = this.form.value.lastName;
+      const email = this.form.value.email;
+      const password = this.form.value.password;
+      const passwordConfirmation = this.form.value.passwordConfirmation;
       this.accountService.register(firstName, lastName, email, password, passwordConfirmation).subscribe(user => {
-        console.log(user);
-        user.expires = new Date(Date.now() + user.expiresIn);
+        user.expires = new Date(user.expiresIn);
         this.userService.addUser(user);
         this.router.navigate(['/']);
         this.isLoading = false;

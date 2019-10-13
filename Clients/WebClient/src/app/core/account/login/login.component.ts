@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NgForm, FormControl, Validators } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { AccountService } from '../../services/account.service';
 import { Router } from '@angular/router';
@@ -10,20 +10,19 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  @ViewChild('f', { static: false }) form: NgForm;
   isLoading = false;
-  email = new FormControl('', [Validators.required, Validators.email]);
-  password = new FormControl('', [Validators.required, Validators.pattern(/[a-zA-Z0-9]{6,30}/g)]);
 
   constructor(
     private userService: UserService,
     private accountService: AccountService,
     private router: Router) { }
 
-  onSubmit(form: NgForm): void {
-    if (form.valid) {
+  onSubmit(): void {
+    if (this.form.valid) {
       this.isLoading = true;
-      const email = form.value.email;
-      const password = form.value.password;
+      const email = this.form.value.email;
+      const password = this.form.value.password;
       this.accountService.login(email, password).subscribe(user => {
         user.expires = new Date(user.expiresIn);
         this.userService.addUser(user);
