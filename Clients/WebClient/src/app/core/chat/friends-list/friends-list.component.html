@@ -1,4 +1,34 @@
-<h4>-- {{title}} --</h4>
-<mat-nav-list *ngFor="let friend of list">
-  <a mat-list-item routerLink="/">{{friend.firstName}} {{friend.lastName}}, {{friend.email}}</a>
-</mat-nav-list>
+<mat-toolbar>
+    <mat-toolbar-row>
+      <p>Friends:</p>
+      <span class="spacer"></span>
+      <button mat-button (click)="clickClose()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <ng-template [ngIf]="invitations">
+    <h3>You have new invatations:</h3>
+  </ng-template>
+  <ng-template [ngIf]="invitedFriends">
+    <h3>You invite these people:</h3>
+  </ng-template>
+  <mat-nav-list *ngFor="let friend of list">
+    <button mat-flat-button class="full-width" id="flmfb" (click)="selectUser(friend)">
+      <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
+      <span class="spacer"></span>
+      <ng-template [ngIf]="friends">
+        <button mat-raised-button (click)="clickClose()">Block</button>
+      </ng-template>
+      <ng-template [ngIf]="invitedFriends">
+        <button mat-raised-button (click)="clickClose()">Drop</button>
+      </ng-template>
+      <ng-template [ngIf]="invitations">
+        <button mat-raised-button (click)="clickClose()">Accept</button>&nbsp;
+        <button mat-raised-button (click)="clickClose()">Block</button>
+      </ng-template>
+      <ng-template [ngIf]="awaitableFriends">
+        <button mat-raised-button (click)="clickClose()">Block</button>
+      </ng-template>
+    </button>
+  </mat-nav-list>

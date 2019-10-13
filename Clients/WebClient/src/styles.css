@@ -11,8 +11,8 @@ html, body {
 }
 
 .inner {
-  margin: 0 1vw 3vh 1vw;
-  padding-top: 3vh;
+  margin: 0 1vw;
+  padding: 3vh 0;
 }
 
 .sides-15 {
@@ -29,4 +29,13 @@ html, body {
 
 .centred-text {
   text-align: center;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+#flmfb > span {
+  display: contents;
+  width: 100%;
 }

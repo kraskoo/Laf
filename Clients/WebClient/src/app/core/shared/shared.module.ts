@@ -16,10 +16,13 @@ import { AppRoutingModule } from '../../app-routing.module';
 
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { FontComponent } from './font/font.component';
 import { FooterComponent } from './footer/footer.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { BadRequestComponent } from './bad-request/bad-request.component';
+import { ThemeComponent } from './theme/theme.component';
+
 @NgModule({
   declarations: [
     NavbarComponent,
@@ -27,7 +30,9 @@ import { BadRequestComponent } from './bad-request/bad-request.component';
     HomeComponent,
     NotFoundComponent,
     UnauthorizedComponent,
-    BadRequestComponent
+    BadRequestComponent,
+    FontComponent,
+    ThemeComponent
   ],
   imports: [
     CommonModule,

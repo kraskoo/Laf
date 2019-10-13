@@ -2,3 +2,9 @@ h4 {
   text-align: right;
   padding: 10px 20px;
 }
+
+button[mat-flat-button] {
+  display: flex;
+  padding: 0 8px;
+  width: 100%;
+}

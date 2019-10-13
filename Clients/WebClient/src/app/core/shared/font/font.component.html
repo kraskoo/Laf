@@ -1,0 +1,14 @@
+<button mat-button [matMenuTriggerFor]="fontMenu" matTooltip="Font selector" [matTooltipPosition]="'below'"
+  aria-label="Button that displays a tooltip in various positions">
+  <mat-icon aria-hidden="false" aria-label="Font icon">font_download</mat-icon>
+</button>
+<mat-menu #fontMenu="matMenu" yPosition="below">
+  <button mat-menu-item *ngFor="let font of fontKeys" (click)="changeFont(font)">
+    <ng-template [ngIf]="font === fontKey">
+      <strong>{{font}}</strong>
+    </ng-template>
+    <ng-template [ngIf]="font !== fontKey">
+      {{font}}
+    </ng-template>
+  </button>
+</mat-menu>

@@ -1,17 +1,17 @@
 import { Component, OnDestroy, ViewChild, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { Observable } from 'rxjs';
+
 import { MatSidenav } from '@angular/material/sidenav';
 
+import { User } from '../../models/user.model';
+import { UserFriends } from '../../models/user-friends.model';
+import { AccountService } from '../../services/account.service';
 import { ChatService } from '../../services/chat.service';
 
+import { FriendsListComponent } from '../friends-list/friends-list.component';
+
 import { config } from '../../services/configuration.service';
-import { UserFriends } from '../../models/user-friends.model';
-export interface Tile {
-  color: string;
-  cols: number;
-  rows: number;
-  text: string;
-}
 
 @Component({
   selector: 'app-main-chat',
@@ -19,31 +19,40 @@ export interface Tile {
   styleUrls: ['./main-chat.component.css']
 })
 export class MainChatComponent implements OnInit, OnDestroy {
-  friends: UserFriends;
-  tiles: Tile[] = [
-    { text: 'Search', cols: 3, rows: 1, color: 'lightblue' },
-    { text: 'Chat', cols: 3, rows: 11, color: 'lightgreen' },
-    { text: 'Message', cols: 3, rows: 1, color: 'lightpink' }
-  ];
+  friends$: Observable<UserFriends>;
+  selectedUser?: User;
+  @ViewChild(MatSidenav, { static: false })
+  set sideNav(value: MatSidenav) {
+    this.chatService.sideNav = value;
+  }
 
   constructor(
-    private route: ActivatedRoute,
+    private router: Router,
+    private accountService: AccountService,
     private chatService: ChatService) {
-      config.inChatPage = true;
+    config.inChatPage = true;
+    // tslint:disable-next-line: only-arrow-functions
+    this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; };
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        // Trick the Router into believing it's last link wasn't previously loaded
+        this.router.navigated = false;
+      }
+    });
   }
 
   ngOnInit(): void {
+    this.friends$ = this.accountService.friends(true);
     // tslint:disable-next-line: no-string-literal
-    this.friends = this.route.snapshot.data['friends'];
+    // this.friends = this.route.snapshot.data['friends'];
   }
 
   ngOnDestroy(): void {
     config.inChatPage = false;
   }
 
-  @ViewChild(MatSidenav, { static: false })
-  set sideNav(value: MatSidenav) {
-    this.chatService.sideNav = value;
+  selectUser(fl: FriendsListComponent) {
+    this.selectedUser = fl.selectedUser;
   }
 
   get isInChatRoom(): boolean {

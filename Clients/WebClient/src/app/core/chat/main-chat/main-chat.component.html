@@ -1,21 +1,37 @@
 <div class="container" *ngIf="isInChatRoom">
-  <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #sn (sideNav)="sn" [mode]="'side'" fixedTopGap="56">
-      <ng-template [ngIf]="friends.friends.length > 0">
-        <chat-friends-list [title]="'Friends'" [list]="friends.friends"></chat-friends-list>
-      </ng-template>
-      <ng-template [ngIf]="friends.awaitableFriends.length > 0">
-        <chat-friends-list [title]="'Awaitable Friends'" [list]="friends.awaitableFriends"></chat-friends-list>
-      </ng-template>
-      <ng-template [ngIf]="friends.invitations.length > 0">
-        <chat-friends-list [title]="'Invitations'" [list]="friends.invitations"></chat-friends-list>
-      </ng-template>
-      <ng-template [ngIf]="friends.invitedFriends.length > 0">
-        <chat-friends-list [title]="'Invited Friends'" [list]="friends.invitedFriends"></chat-friends-list>
-      </ng-template>
-    </mat-sidenav>
-    <mat-sidenav-content>
-      <chat-base-content></chat-base-content>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</div>
+    <mat-sidenav-container class="sidenav-container">
+      <mat-sidenav #sn (sideNav)="sn" [mode]="'side'" fixedTopGap="56">
+        <ng-template [ngIf]="(friends$ | async)?.friends.length > 0">
+          <chat-friends-list #friendsList
+                            [title]="'Friends'"
+                            [list]="(friends$ | async)?.friends"
+                            [friends]="true"
+                            (click)="selectUser(friendsList)"></chat-friends-list>
+        </ng-template>
+        <ng-template [ngIf]="(friends$ | async)?.awaitableFriends.length > 0">
+          <chat-friends-list #awaitableFriendsList
+                            [title]="'Awaitable Friends'"
+                            [list]="(friends$ | async)?.awaitableFriends"
+                            [awaitableFriends]="true"
+                            (click)="selectUser(awaitableFriendsList)"></chat-friends-list>
+        </ng-template>
+        <ng-template [ngIf]="(friends$ | async)?.invitations.length > 0">
+          <chat-friends-list #invitationsList
+                            [title]="'Invitations'"
+                            [list]="(friends$ | async)?.invitations"
+                            [invitations]="true"
+                            (click)="selectUser(invitationsList)"></chat-friends-list>
+        </ng-template>
+        <ng-template [ngIf]="(friends$ | async)?.invitedFriends.length > 0">
+          <chat-friends-list #invitedFriendsList
+                            [title]="'Invited Friends'"
+                            [list]="(friends$ | async)?.invitedFriends"
+                            [invitedFriends]="true"
+                            (click)="selectUser(invitedFriendsList)"></chat-friends-list>
+        </ng-template>
+      </mat-sidenav>
+      <mat-sidenav-content>
+        <chat-base-content></chat-base-content>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>

@@ -13,12 +13,20 @@ const routes: Routes = [
   { path: 'unauthorized', component: UnauthorizedComponent },
   { path: 'bad-request/:message', component: BadRequestComponent },
   { path: 'account', loadChildren: () => import('./core/account/account.module').then(m => m.AccountModule).catch(console.error) },
-  { path: 'chat', loadChildren: () => import('./core/chat/chat.module').then(m => m.ChatModule).catch(console.error) },
+  {
+    path: 'chat',
+    loadChildren: () => import('./core/chat/chat.module').then(m => m.ChatModule).catch(console.error),
+    runGuardsAndResolvers: 'always'
+  },
   { path: '**', redirectTo: 'not-found', pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      onSameUrlNavigation: 'reload'
+    })
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

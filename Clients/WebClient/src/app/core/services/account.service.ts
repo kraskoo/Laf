@@ -30,7 +30,7 @@ export class AccountService {
       });
   }
 
-  users(friends: boolean = false, search: string = null) {
+  friends(friends: boolean = false, search: string = null) {
     let url = 'account/friends';
     if (friends) {
       url = `${url}?friends=true`;
@@ -42,5 +42,22 @@ export class AccountService {
 
     const headers = { Authorization: `Bearer ${this.userService.user.token}` };
     return this.http.get<UserFriends>(url, { headers });
+  }
+
+  users(search: string = null) {
+    let url = 'account/friends';
+    if (search) {
+      url = `${url}?search=${search}`;
+    }
+
+    const headers = { Authorization: `Bearer ${this.userService.user.token}` };
+    return this.http.get<User[]>(url, { headers });
+  }
+
+  addFriend(id: string) {
+    const url = 'account/addfriend';
+    const body = { id };
+    const headers = { Authorization: `Bearer ${this.userService.user.token}` };
+    return this.http.post(url, body, { headers });
   }
 }
