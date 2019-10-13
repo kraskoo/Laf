@@ -61,4 +61,21 @@ export class AccountService {
     const body = { id };
     return this.http.post(url, body);
   }
+
+  invitationsCount() {
+    const url = 'account/invitationscount';
+    return this.http.get<number>(url);
+  }
+
+  dropUser(id: string) {
+    const url = 'account/dropfriendship';
+    const body = { id };
+    return this.http.post(url, body);
+  }
+
+  blockUser(id: string) {
+    const url = 'account/blockuser';
+    const body = { id };
+    return this.http.post(url, body);
+  }
 }

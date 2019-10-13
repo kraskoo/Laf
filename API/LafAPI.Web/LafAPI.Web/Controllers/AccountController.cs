@@ -30,11 +30,40 @@
         }
 
         [HttpGet]
-        [AllowAnonymous]
         [Route("[action]")]
-        public IActionResult Login()
+        public async Task<IActionResult> InvitationsCount() =>
+            this.Ok(await this.userFriendService.InvitationsCount(this.User.GetId()));
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> DropFriendship([FromBody]FriendBindingModel model)
         {
-            return this.Ok("Hi");
+            var userId = model.Id;
+            var id = this.User.GetId();
+            var result = await this.ValidateFriend(userId);
+            if (result != null)
+            {
+                return this.BadRequest(result);
+            }
+
+            await this.userFriendService.DropFriendship(id, userId);
+            return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> BlockUser([FromBody]FriendBindingModel model)
+        {
+            var userId = model.Id;
+            var id = this.User.GetId();
+            var result = await this.ValidateFriend(userId);
+            if (result != null)
+            {
+                return this.BadRequest(result);
+            }
+
+            await this.userFriendService.BlockFriendship(id, userId);
+            return this.Ok();
         }
 
         [HttpPost]

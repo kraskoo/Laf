@@ -17,13 +17,19 @@ export class AppHttpInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     let httpHeaders: HttpHeaders;
     if (!(req.url.endsWith('/login') || req.url.endsWith('/register'))) {
-      const expiresIn = this.userService.user.expiresIn;
-      const sessionExpired = new Date(Date.now()) > new Date(Date.now() + expiresIn);
-      if (sessionExpired) {
-        this.userService.removeUser();
-        this.router.navigate([ '/account/login' ]);
-        return of(null as any);
+      if (this.userService.user) {
+        const expiresIn = this.userService.user.expiresIn;
+        const sessionExpired = new Date(Date.now()) > new Date(Date.now() + expiresIn);
+        if (sessionExpired) {
+          this.userService.removeUser();
+          this.router.navigate(['/account/login']);
+          return of(null as any);
+        }
       }
+    }
+
+    if (req.url.endsWith('/invitationscount') && !this.userService.user) {
+      return of(null as any);
     }
 
     if (this.userService.user && this.userService.user.token !== '') {
@@ -35,7 +41,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
       headers: httpHeaders
     })).pipe(catchError((err: HttpErrorResponse) => {
       if (err.status !== 200) {
-        this.router.navigate([ '/bad-request', err.message ]);
+        this.router.navigate(['/bad-request', err.message]);
       }
 
       return throwError(err);

@@ -5,7 +5,7 @@
         <mat-icon>menu</mat-icon>
       </button>
       <a mat-icon-button routerLink="/chat/invitations" matTooltip="Invitations" [matTooltipPosition]="'below'">
-        <mat-icon matBadge="15" matBadgeColor="warn">face</mat-icon>
+        <mat-icon matBadge="{{invitationsCount$ | async}}" matBadgeColor="warn">face</mat-icon>
       </a>
     </ng-template>
     <ng-template [ngIf]="hasLoggedinUser && !isInChatRoom">

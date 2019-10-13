@@ -59,9 +59,10 @@
         public LoginResponse Authenticate(string email, string password, HttpContext httpContext, out User user)
         {
             var options = httpContext.RequestServices.GetRequiredService<IOptions<TokenProviderOptions>>().Value;
-            var response = httpContext.GetLoginResponse(
-                               options,
-                               this.userManager.PrincipalResolver(email, password, out user))
+            var response = httpContext
+                .GetLoginResponse(
+                    options,
+                    this.userManager.PrincipalResolver(email, password, out user))
                 .GetAwaiter()
                 .GetResult();
             response.Result = SuccessfullyAuthentication;
@@ -71,7 +72,10 @@
                 return response;
             }
 
-            var isValidPassword = this.userManager.CheckPasswordAsync(user, password).GetAwaiter().GetResult();
+            var isValidPassword = this.userManager
+                .CheckPasswordAsync(user, password)
+                .GetAwaiter()
+                .GetResult();
             if (!isValidPassword)
             {
                 response.Result = InvalidPassword;

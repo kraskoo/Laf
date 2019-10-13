@@ -21,7 +21,7 @@
         <div class="flmfb">
           <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
           <span class="spacer"></span>
-          <button mat-raised-button class="red">Block</button>
+          <button mat-raised-button class="red" (click)="blockUser(friend.id)">Block</button>
         </div>
       </mat-nav-list>
     </ng-template>
@@ -37,7 +37,7 @@
         <div class="flmfb">
           <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
           <span class="spacer"></span>
-          <button mat-raised-button>Block</button>
+          <button mat-raised-button (click)="blockUser(friend.id)">Block</button>
         </div>
       </mat-nav-list>
     </ng-template>
@@ -54,7 +54,7 @@
           <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
           <span class="spacer"></span>
           <button mat-raised-button class="green" (click)="acceptFriend(friend.id)">Accept</button>&nbsp;
-          <button mat-raised-button class="red">Reject</button>
+          <button mat-raised-button class="red" (click)="dropUser(friend.id)">Reject</button>
         </div>
       </mat-nav-list>
     </ng-template>
@@ -70,7 +70,7 @@
         <div class="flmfb">
           <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
           <span class="spacer"></span>
-          <button mat-raised-button class="red">Drop</button>
+          <button mat-raised-button class="red" (click)="dropUser(friend.id)">Drop</button>
         </div>
       </mat-nav-list>
     </ng-template>

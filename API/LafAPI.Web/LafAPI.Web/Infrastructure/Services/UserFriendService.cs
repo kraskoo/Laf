@@ -117,6 +117,37 @@
             return await Task.FromResult(friendshipConfirmation);
         }
 
+        public async Task<int> InvitationsCount(string userId)
+        {
+            var list = await this.GetAll(uf => uf.UserId == userId && uf.Status == FriendshipStatusType.Invited)
+                            .To<UserFromUserFriendViewModel>()
+                            .ToListAsync();
+            return this.GetInvitations(list, userId).Count;
+        }
+
+        public async Task DropFriendship(string id, string userId)
+        {
+            var userFriend = await this.GetAsync(id, userId) ??
+                             await this.GetAsync(userId, id);
+            if (userFriend != null)
+            {
+                this.repository.Delete(userFriend);
+                await this.repository.SaveChangesAsync();
+            }
+        }
+
+        public async Task BlockFriendship(string id, string userId)
+        {
+            var userFriend = await this.GetAsync(id, userId) ??
+                             await this.GetAsync(userId, id);
+            if (userFriend != null)
+            {
+                userFriend.Status = FriendshipStatusType.Blocked;
+                this.repository.Update(userFriend);
+                await this.repository.SaveChangesAsync();
+            }
+        }
+
         private List<UserViewModel> GetUserFriends(
             IEnumerable<UserFromUserFriendViewModel> list,
             string userId,

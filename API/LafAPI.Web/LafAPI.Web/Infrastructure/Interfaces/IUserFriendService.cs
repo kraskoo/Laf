@@ -32,5 +32,11 @@
         Task<int> CreateAsync(string userId, string friendId);
 
         Task<FriendshipConfirmationResult> ConfirmAsync(string userId, string friendId);
+
+        Task<int> InvitationsCount(string userId);
+
+        Task DropFriendship(string id, string userId);
+
+        Task BlockFriendship(string id, string userId);
     }
 }

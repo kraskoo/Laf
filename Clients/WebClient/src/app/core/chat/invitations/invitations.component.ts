@@ -54,6 +54,18 @@ export class InvitationsComponent implements OnInit {
       this.router.navigate(['/chat/invitations']);
     });
   }
+
+  dropUser(id: string) {
+    this.accountService.dropUser(id).subscribe(() => {
+      this.router.navigate(['/chat/invitations']);
+    });
+  }
+
+  blockUser(id: string) {
+    this.accountService.blockUser(id).subscribe(() => {
+      this.router.navigate(['/chat/invitations']);
+    });
+  }
 }
 
 @Component({
