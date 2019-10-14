@@ -12,10 +12,6 @@ export class FriendsListComponent {
   selectedUser?: User;
   @Input() title: string;
   @Input() list: User[];
-  @Input() friends = false;
-  @Input() invitedFriends = false;
-  @Input() invitations = false;
-  @Input() awaitableFriends = false;
 
   constructor(private chatService: ChatService) { }
 

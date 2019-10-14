@@ -2,8 +2,7 @@
   <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #sn (sideNav)="sn" [mode]="'side'" fixedTopGap="56">
       <ng-template [ngIf]="(friends$ | async)?.friends.length > 0">
-        <chat-friends-list #friendsList [title]="'Friends'" [list]="(friends$ | async)?.friends" [friends]="true"
-          (click)="selectUser(friendsList)"></chat-friends-list>
+        <chat-friends-list #friendsList [title]="'Friends'" [list]="(friends$ | async)?.friends" (click)="selectUser(friendsList)"></chat-friends-list>
       </ng-template>
       <ng-template [ngIf]="(friends$ | async)?.friends.length === 0">
         <mat-toolbar>
