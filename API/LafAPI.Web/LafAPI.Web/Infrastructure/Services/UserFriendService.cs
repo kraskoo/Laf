@@ -125,21 +125,21 @@
             return this.GetInvitations(list, userId).Count;
         }
 
-        public async Task DropFriendship(string id, string userId)
+        public async Task DropFriendship(string userId, string friendId)
         {
-            var userFriend = await this.GetAsync(id, userId) ??
-                             await this.GetAsync(userId, id);
-            if (userFriend != null)
+            var userFriend = await this.GetAsync(userId, friendId);
+            var friendUser = await this.GetAsync(friendId, userId);
+            if (userFriend != null && friendUser != null)
             {
                 this.repository.Delete(userFriend);
+                this.repository.Delete(friendUser);
                 await this.repository.SaveChangesAsync();
             }
         }
 
         public async Task BlockFriendship(string id, string userId)
         {
-            var userFriend = await this.GetAsync(id, userId) ??
-                             await this.GetAsync(userId, id);
+            var userFriend = await this.GetAsync(id, userId);
             if (userFriend != null)
             {
                 userFriend.Status = FriendshipStatusType.Blocked;

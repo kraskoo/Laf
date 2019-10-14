@@ -35,7 +35,7 @@
 
         Task<int> InvitationsCount(string userId);
 
-        Task DropFriendship(string id, string userId);
+        Task DropFriendship(string userId, string friendId);
 
         Task BlockFriendship(string id, string userId);
     }
