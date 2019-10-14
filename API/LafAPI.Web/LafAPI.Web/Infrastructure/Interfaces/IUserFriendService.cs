@@ -16,7 +16,7 @@
 
         Task<FriendsViewModel> GetFriendsAsync(
             string userId,
-            params Func<UserFromUserFriendViewModel, bool>[] predicates);
+            params Func<UserContactsFromUserFriendViewModel, bool>[] predicates);
 
         IQueryable<UserFriend> GetAll(params Expression<Func<UserFriend, bool>>[] predicates);
 
@@ -34,8 +34,12 @@
 
         Task<int> InvitationsCount(string userId);
 
+        Task Reject(string userId, string friendId);
+
         Task DropFriendship(string userId, string friendId);
 
-        Task BlockFriendship(string id, string userId);
+        Task BlockUser(string userId, string friendId);
+
+        Task UnblockUser(string userId, string friendId);
     }
 }

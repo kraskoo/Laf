@@ -30,7 +30,7 @@
 
         public async Task<FriendsViewModel> GetFriendsAsync(
             string userId,
-            params Func<UserFromUserFriendViewModel, bool>[] predicates) =>
+            params Func<UserContactsFromUserFriendViewModel, bool>[] predicates) =>
             await this.GetFriendsViewModel(userId, predicates);
 
         public IQueryable<UserFriend> GetAll(params Expression<Func<UserFriend, bool>>[] predicates) =>
@@ -116,12 +116,28 @@
             return await Task.FromResult(friendshipConfirmation);
         }
 
-        public async Task<int> InvitationsCount(string userId)
+        public async Task<int> InvitationsCount(string userId) =>
+            this.GetInvitations(
+                    await this.GetAll(uf =>
+                                uf.UserId == userId &&
+                                uf.Status == FriendshipStatusType.Invited)
+                        .To<UserContactsFromUserFriendViewModel>()
+                        .ToListAsync(),
+                    userId)
+                .Count;
+
+        public async Task Reject(string userId, string friendId)
         {
-            var list = await this.GetAll(uf => uf.UserId == userId && uf.Status == FriendshipStatusType.Invited)
-                            .To<UserFromUserFriendViewModel>()
-                            .ToListAsync();
-            return this.GetInvitations(list, userId).Count;
+            var userFriend = await this.GetAsync(userId, friendId);
+            var friendUser = await this.GetAsync(friendId, userId);
+            if (userFriend != null && friendUser != null)
+            {
+                userFriend.Status = FriendshipStatusType.Rejected;
+                friendUser.Status = FriendshipStatusType.Rejected;
+                this.repository.Update(userFriend);
+                this.repository.Update(friendUser);
+                await this.repository.SaveChangesAsync();
+            }
         }
 
         public async Task DropFriendship(string userId, string friendId)
@@ -136,9 +152,9 @@
             }
         }
 
-        public async Task BlockFriendship(string id, string userId)
+        public async Task BlockUser(string userId, string friendId)
         {
-            var userFriend = await this.GetAsync(id, userId);
+            var userFriend = await this.GetAsync(userId, friendId);
             if (userFriend != null)
             {
                 userFriend.Status = FriendshipStatusType.Blocked;
@@ -147,29 +163,22 @@
             }
         }
 
-        private List<UserViewModel> Get(
-            IEnumerable<UserFromUserFriendViewModel> list,
-            Func<UserFromUserFriendViewModel, bool> predicate,
-            Func<UserFromUserFriendViewModel, UserViewModel> selectionPredicate,
-            Func<UserFromUserFriendViewModel, bool> additionalPredicate = null)
-        {
-            if (additionalPredicate == null)
-            {
-                return list.Where(predicate)
-                    .Select(selectionPredicate)
-                    .ToList();
-            }
+        public async Task UnblockUser(string userId, string friendId) =>
+            await this.DropFriendship(userId, friendId);
 
-            return list.Where(predicate)
-                .Where(additionalPredicate)
-                .Select(selectionPredicate)
-                .ToList();
-        }
+        private List<UserViewModel> Get(
+            IEnumerable<UserContactsFromUserFriendViewModel> list,
+            Func<UserContactsFromUserFriendViewModel, bool> predicate,
+            Func<UserContactsFromUserFriendViewModel, UserViewModel> selectionPredicate,
+            Func<UserContactsFromUserFriendViewModel, bool> additionalPredicate = null) =>
+            additionalPredicate == null ?
+                list.Where(predicate).Select(selectionPredicate).ToList() :
+                list.Where(predicate).Where(additionalPredicate).Select(selectionPredicate).ToList();
 
         private List<UserViewModel> GetUserFriends(
-            IEnumerable<UserFromUserFriendViewModel> list,
+            IEnumerable<UserContactsFromUserFriendViewModel> list,
             string userId,
-            params Func<UserFromUserFriendViewModel, bool>[] predicates) =>
+            params Func<UserContactsFromUserFriendViewModel, bool>[] predicates) =>
             this.Get(
                 list,
                 uf =>
@@ -178,9 +187,9 @@
                 predicates.Length > 1 ? predicates[0] : null);
 
         private List<UserViewModel> GetInvitedFriends(
-            IEnumerable<UserFromUserFriendViewModel> list,
+            IEnumerable<UserContactsFromUserFriendViewModel> list,
             string userId,
-            params Func<UserFromUserFriendViewModel, bool>[] predicates) =>
+            params Func<UserContactsFromUserFriendViewModel, bool>[] predicates) =>
             this.Get(
                 list,
                 uf =>
@@ -190,9 +199,9 @@
                 predicates.Length > 1 ? predicates[1] : null);
 
         private List<UserViewModel> GetInvitations(
-            IEnumerable<UserFromUserFriendViewModel> list,
+            IEnumerable<UserContactsFromUserFriendViewModel> list,
             string userId,
-            params Func<UserFromUserFriendViewModel, bool>[] predicates) =>
+            params Func<UserContactsFromUserFriendViewModel, bool>[] predicates) =>
             this.Get(
                 list,
                 uf =>
@@ -201,54 +210,56 @@
                 this.FromFriend,
                 predicates.Length > 1 ? predicates[0] : null);
 
-        private List<UserViewModel> GetAwaitableFriends(
-            IEnumerable<UserFromUserFriendViewModel> list,
+        private List<UserViewModel> GetBlockedUsers(
+            IEnumerable<UserContactsFromUserFriendViewModel> list,
             string userId,
-            params Func<UserFromUserFriendViewModel, bool>[] predicates) =>
+            params Func<UserContactsFromUserFriendViewModel, bool>[] predicates) =>
             this.Get(
                 list,
                 uf =>
-                    uf.FriendId == userId &&
-                    uf.Status == FriendshipStatusType.Awaitable,
-                this.FromUser,
+                    uf.Id == userId &&
+                    uf.Status == FriendshipStatusType.Blocked,
+                this.FromFriend,
                 predicates.Length > 1 ? predicates[1] : null);
 
         private async Task<FriendsViewModel> GetFriendsViewModel(
             string userId,
-            params Func<UserFromUserFriendViewModel, bool>[] predicates)
+            params Func<UserContactsFromUserFriendViewModel, bool>[] predicates)
         {
             var viewModels = await this.GetAll(
                     uf =>
-                        (uf.UserId == userId &&
-                            (uf.Status == FriendshipStatusType.Accepted || uf.Status == FriendshipStatusType.Awaitable)) ||
+                        (uf.UserId == userId && uf.Status == FriendshipStatusType.Accepted) ||
+                        (uf.UserId == userId && uf.Status == FriendshipStatusType.Blocked) ||
                         ((uf.UserId == userId || uf.FriendId == userId) && uf.Status == FriendshipStatusType.Invited))
-                .To<UserFromUserFriendViewModel>()
+                .To<UserContactsFromUserFriendViewModel>()
                 .ToListAsync();
             return new FriendsViewModel
             {
                 Friends = this.GetUserFriends(viewModels, userId, predicates),
-                AwaitableFriends = this.GetAwaitableFriends(viewModels, userId, predicates),
-                InvitedFriends = this.GetInvitedFriends(viewModels, userId, predicates),
+                BlockedUsers = this.GetBlockedUsers(viewModels, userId, predicates),
+                InvitedUsers = this.GetInvitedFriends(viewModels, userId, predicates),
                 Invitations = this.GetInvitations(viewModels, userId, predicates)
             };
         }
 
-        private UserViewModel FromUser(UserFromUserFriendViewModel model) =>
+        private UserViewModel FromUser(UserContactsFromUserFriendViewModel model) =>
             new UserViewModel
                 {
                     Id = model.Id,
                     Email = model.Email,
                     FirstName = model.FirstName,
-                    LastName = model.LastName
+                    LastName = model.LastName,
+                    Status = model.Status
                 };
 
-        private UserViewModel FromFriend(UserFromUserFriendViewModel model) =>
+        private UserViewModel FromFriend(UserContactsFromUserFriendViewModel model) =>
             new UserViewModel
                 {
                     Id = model.FriendId,
                     Email = model.FriendEmail,
                     FirstName = model.FriendFirstName,
-                    LastName = model.FriendLastName
+                    LastName = model.FriendLastName,
+                    Status = model.Status
                 };
     }
 }

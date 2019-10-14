@@ -36,6 +36,22 @@
 
         [HttpPost]
         [Route("[action]")]
+        public async Task<IActionResult> Reject([FromBody] FriendBindingModel model)
+        {
+            var userId = model.Id;
+            var result = await this.ValidateFriend(userId);
+            if (result != null)
+            {
+                return result;
+            }
+
+            var id = this.User.GetId();
+            await this.userFriendService.Reject(id, userId);
+            return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> DropFriendship([FromBody]FriendBindingModel model)
         {
             var userId = model.Id;
@@ -62,7 +78,23 @@
                 return result;
             }
 
-            await this.userFriendService.BlockFriendship(id, userId);
+            await this.userFriendService.BlockUser(id, userId);
+            return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> UnblockUser([FromBody]FriendBindingModel model)
+        {
+            var userId = model.Id;
+            var result = await this.ValidateFriend(userId);
+            if (result != null)
+            {
+                return result;
+            }
+
+            var id = this.User.GetId();
+            await this.userFriendService.UnblockUser(id, userId);
             return this.Ok();
         }
 

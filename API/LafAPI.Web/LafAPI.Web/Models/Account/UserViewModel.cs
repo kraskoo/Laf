@@ -13,6 +13,8 @@
 
         public string Email { get; set; }
 
+        public FriendshipStatusType? Status { get; set; }
+
         public override int GetHashCode() =>
             this.Id.GetHashCode();
     }
