@@ -55,6 +55,12 @@ export class InvitationsComponent implements OnInit {
     });
   }
 
+  reject(id: string) {
+    this.accountService.reject(id).subscribe(() => {
+      this.router.navigate(['/chat/invitations']);
+    });
+  }
+
   dropUser(id: string) {
     this.accountService.dropUser(id).subscribe(() => {
       this.router.navigate(['/chat/invitations']);
@@ -63,6 +69,12 @@ export class InvitationsComponent implements OnInit {
 
   blockUser(id: string) {
     this.accountService.blockUser(id).subscribe(() => {
+      this.router.navigate(['/chat/invitations']);
+    });
+  }
+
+  unblockUser(id: string) {
+    this.accountService.unblockUser(id).subscribe(() => {
       this.router.navigate(['/chat/invitations']);
     });
   }

@@ -67,6 +67,12 @@ export class AccountService {
     return this.http.get<number>(url);
   }
 
+  reject(id: string) {
+    const url = 'account/reject';
+    const body = { id };
+    return this.http.post(url, body);
+  }
+
   dropUser(id: string) {
     const url = 'account/dropfriendship';
     const body = { id };
@@ -75,6 +81,12 @@ export class AccountService {
 
   blockUser(id: string) {
     const url = 'account/blockuser';
+    const body = { id };
+    return this.http.post(url, body);
+  }
+
+  unblockUser(id: string) {
+    const url = 'account/unblockuser';
     const body = { id };
     return this.http.post(url, body);
   }

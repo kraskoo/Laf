@@ -29,15 +29,15 @@
   <mat-grid-tile colspan="1" rowspan="7" class="block">
     <mat-toolbar>
       <mat-toolbar-row>
-        <p>Awaitable Friends</p>
+        <p>Blocked Users</p>
       </mat-toolbar-row>
     </mat-toolbar>
-    <ng-template [ngIf]="(friends$ | async)?.awaitableFriends.length > 0">
-      <mat-nav-list *ngFor="let friend of (friends$ | async)?.awaitableFriends">
+    <ng-template [ngIf]="(friends$ | async)?.blockedUsers.length > 0">
+      <mat-nav-list *ngFor="let friend of (friends$ | async)?.blockedUsers">
         <div class="flmfb">
           <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
           <span class="spacer"></span>
-          <button mat-raised-button (click)="blockUser(friend.id)">Block</button>
+          <button mat-raised-button class="blue" (click)="unblockUser(friend.id)">Unblock</button>
         </div>
       </mat-nav-list>
     </ng-template>
@@ -62,11 +62,11 @@
   <mat-grid-tile colspan="1" rowspan="7" class="block">
     <mat-toolbar>
       <mat-toolbar-row>
-        <p>Invited Friends</p>
+        <p>Invited Users</p>
       </mat-toolbar-row>
     </mat-toolbar>
-    <ng-template [ngIf]="(friends$ | async)?.invitedFriends.length > 0">
-      <mat-nav-list *ngFor="let friend of (friends$ | async)?.invitedFriends">
+    <ng-template [ngIf]="(friends$ | async)?.invitedUsers.length > 0">
+      <mat-nav-list *ngFor="let friend of (friends$ | async)?.invitedUsers">
         <div class="flmfb">
           <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
           <span class="spacer"></span>

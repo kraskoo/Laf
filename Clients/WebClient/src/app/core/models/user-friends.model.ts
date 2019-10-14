@@ -2,7 +2,7 @@ import { User } from './user.model';
 
 export interface UserFriends {
   friends: User[];
-  invitedFriends: User[];
+  blockedUsers: User[];
+  invitedUsers: User[];
   invitations: User[];
-  awaitableFriends: User[];
 }

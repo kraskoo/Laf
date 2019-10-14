@@ -17,7 +17,11 @@ mat-grid-tile, figure {
   background-color: #e53935;
 }
 
-.green, .red {
+.blue {
+  background-color: #5e35b1;
+}
+
+.red, .green, .blue {
   color: white;
 }
 
