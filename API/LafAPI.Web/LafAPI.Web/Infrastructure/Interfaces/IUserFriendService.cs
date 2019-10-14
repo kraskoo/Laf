@@ -16,7 +16,6 @@
 
         Task<FriendsViewModel> GetFriendsAsync(
             string userId,
-            bool hasPredicates = false,
             params Func<UserFromUserFriendViewModel, bool>[] predicates);
 
         IQueryable<UserFriend> GetAll(params Expression<Func<UserFriend, bool>>[] predicates);

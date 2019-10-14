@@ -43,7 +43,7 @@
             var result = await this.ValidateFriend(userId);
             if (result != null)
             {
-                return this.BadRequest(result);
+                return result;
             }
 
             await this.userFriendService.DropFriendship(id, userId);
@@ -59,7 +59,7 @@
             var result = await this.ValidateFriend(userId);
             if (result != null)
             {
-                return this.BadRequest(result);
+                return result;
             }
 
             await this.userFriendService.BlockFriendship(id, userId);
@@ -194,7 +194,6 @@
                     !string.IsNullOrEmpty(search) ?
                         await this.userFriendService.GetFriendsAsync(
                             id,
-                            true,
                             uf => uf.FriendFirstName.ToLower().Contains(search) ||
                                   uf.FriendLastName.ToLower().Contains(search) ||
                                   uf.FriendEmail.ToLower().Contains(search),

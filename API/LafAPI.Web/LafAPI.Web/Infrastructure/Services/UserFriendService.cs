@@ -30,9 +30,8 @@
 
         public async Task<FriendsViewModel> GetFriendsAsync(
             string userId,
-            bool hasPredicates = false,
             params Func<UserFromUserFriendViewModel, bool>[] predicates) =>
-            await this.GetFriendsViewModel(userId, hasPredicates, predicates);
+            await this.GetFriendsViewModel(userId, predicates);
 
         public IQueryable<UserFriend> GetAll(params Expression<Func<UserFriend, bool>>[] predicates) =>
             predicates.Aggregate<Expression<Func<UserFriend, bool>>, IQueryable<UserFriend>>(
@@ -148,145 +147,74 @@
             }
         }
 
-        private List<UserViewModel> GetUserFriends(
+        private List<UserViewModel> Get(
             IEnumerable<UserFromUserFriendViewModel> list,
-            string userId,
-            bool hasPredicates = false,
-            params Func<UserFromUserFriendViewModel, bool>[] predicates)
+            Func<UserFromUserFriendViewModel, bool> predicate,
+            Func<UserFromUserFriendViewModel, UserViewModel> selectionPredicate,
+            Func<UserFromUserFriendViewModel, bool> additionalPredicate = null)
         {
-            Func<UserFromUserFriendViewModel, bool> predicate = uf =>
-                uf.Id == userId &&
-                uf.Status == FriendshipStatusType.Accepted;
-            if (!hasPredicates)
+            if (additionalPredicate == null)
             {
                 return list.Where(predicate)
-                    .Select(u => new UserViewModel
-                    {
-                        Id = u.FriendId,
-                        Email = u.FriendEmail,
-                        FirstName = u.FriendFirstName,
-                        LastName = u.FriendLastName
-                    })
+                    .Select(selectionPredicate)
                     .ToList();
             }
 
             return list.Where(predicate)
-                .Where(predicates[0])
-                .Select(u => new UserViewModel
-                {
-                    Id = u.FriendId,
-                    Email = u.FriendEmail,
-                    FirstName = u.FriendFirstName,
-                    LastName = u.FriendLastName
-                })
+                .Where(additionalPredicate)
+                .Select(selectionPredicate)
                 .ToList();
         }
+
+        private List<UserViewModel> GetUserFriends(
+            IEnumerable<UserFromUserFriendViewModel> list,
+            string userId,
+            params Func<UserFromUserFriendViewModel, bool>[] predicates) =>
+            this.Get(
+                list,
+                uf =>
+                    uf.Id == userId && uf.Status == FriendshipStatusType.Accepted,
+                this.FromFriend,
+                predicates.Length > 1 ? predicates[0] : null);
 
         private List<UserViewModel> GetInvitedFriends(
             IEnumerable<UserFromUserFriendViewModel> list,
             string userId,
-            bool hasPredicates = false,
-            params Func<UserFromUserFriendViewModel, bool>[] predicates)
-        {
-            Func<UserFromUserFriendViewModel, bool> predicate = uf =>
-                uf.FriendId == userId &&
-                uf.Status == FriendshipStatusType.Invited;
-            if (!hasPredicates)
-            {
-                return list.Where(predicate)
-                    .Select(u => new UserViewModel
-                    {
-                        Id = u.Id,
-                        Email = u.Email,
-                        FirstName = u.FirstName,
-                        LastName = u.LastName
-                    })
-                    .ToList();
-            }
-
-            return list.Where(predicate)
-                .Where(predicates[1])
-                .Select(u => new UserViewModel
-                {
-                    Id = u.Id,
-                    Email = u.Email,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName
-                })
-                .ToList();
-        }
+            params Func<UserFromUserFriendViewModel, bool>[] predicates) =>
+            this.Get(
+                list,
+                uf =>
+                    uf.FriendId == userId &&
+                    uf.Status == FriendshipStatusType.Invited,
+                this.FromUser,
+                predicates.Length > 1 ? predicates[1] : null);
 
         private List<UserViewModel> GetInvitations(
             IEnumerable<UserFromUserFriendViewModel> list,
             string userId,
-            bool hasPredicates = false,
-            params Func<UserFromUserFriendViewModel, bool>[] predicates)
-        {
-            Func<UserFromUserFriendViewModel, bool> predicate = uf =>
-                uf.Id == userId &&
-                uf.Status == FriendshipStatusType.Invited;
-            if (!hasPredicates)
-            {
-                return list.Where(predicate)
-                    .Select(u => new UserViewModel
-                    {
-                        Id = u.FriendId,
-                        Email = u.FriendEmail,
-                        FirstName = u.FriendFirstName,
-                        LastName = u.FriendLastName
-                    })
-                    .ToList();
-            }
-
-            return list.Where(predicate)
-                .Where(predicates[0])
-                .Select(u => new UserViewModel
-                {
-                    Id = u.FriendId,
-                    Email = u.FriendEmail,
-                    FirstName = u.FriendFirstName,
-                    LastName = u.FriendLastName
-                })
-                .ToList();
-        }
+            params Func<UserFromUserFriendViewModel, bool>[] predicates) =>
+            this.Get(
+                list,
+                uf =>
+                    uf.Id == userId &&
+                    uf.Status == FriendshipStatusType.Invited,
+                this.FromFriend,
+                predicates.Length > 1 ? predicates[0] : null);
 
         private List<UserViewModel> GetAwaitableFriends(
             IEnumerable<UserFromUserFriendViewModel> list,
             string userId,
-            bool hasPredicates = false,
-            params Func<UserFromUserFriendViewModel, bool>[] predicates)
-        {
-            Func<UserFromUserFriendViewModel, bool> predicate = uf =>
-                uf.FriendId == userId &&
-                uf.Status == FriendshipStatusType.Awaitable;
-            if (!hasPredicates)
-            {
-                return list.Where(predicate)
-                    .Select(u => new UserViewModel
-                    {
-                        Id = u.Id,
-                        Email = u.Email,
-                        FirstName = u.FirstName,
-                        LastName = u.LastName
-                    })
-                    .ToList();
-            }
-
-            return list.Where(predicate)
-                .Where(predicates[1])
-                .Select(u => new UserViewModel
-                {
-                    Id = u.Id,
-                    Email = u.Email,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName
-                })
-                .ToList();
-        }
+            params Func<UserFromUserFriendViewModel, bool>[] predicates) =>
+            this.Get(
+                list,
+                uf =>
+                    uf.FriendId == userId &&
+                    uf.Status == FriendshipStatusType.Awaitable,
+                this.FromUser,
+                predicates.Length > 1 ? predicates[1] : null);
 
         private async Task<FriendsViewModel> GetFriendsViewModel(
             string userId,
-            bool hasPredicates = false,
             params Func<UserFromUserFriendViewModel, bool>[] predicates)
         {
             var viewModels = await this.GetAll(
@@ -298,11 +226,29 @@
                 .ToListAsync();
             return new FriendsViewModel
             {
-                Friends = this.GetUserFriends(viewModels, userId, hasPredicates, predicates),
-                AwaitableFriends = this.GetAwaitableFriends(viewModels, userId, hasPredicates, predicates),
-                InvitedFriends = this.GetInvitedFriends(viewModels, userId, hasPredicates, predicates),
-                Invitations = this.GetInvitations(viewModels, userId, hasPredicates, predicates)
+                Friends = this.GetUserFriends(viewModels, userId, predicates),
+                AwaitableFriends = this.GetAwaitableFriends(viewModels, userId, predicates),
+                InvitedFriends = this.GetInvitedFriends(viewModels, userId, predicates),
+                Invitations = this.GetInvitations(viewModels, userId, predicates)
             };
         }
+
+        private UserViewModel FromUser(UserFromUserFriendViewModel model) =>
+            new UserViewModel
+                {
+                    Id = model.Id,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName
+                };
+
+        private UserViewModel FromFriend(UserFromUserFriendViewModel model) =>
+            new UserViewModel
+                {
+                    Id = model.FriendId,
+                    Email = model.FriendEmail,
+                    FirstName = model.FriendFirstName,
+                    LastName = model.FriendLastName
+                };
     }
 }
