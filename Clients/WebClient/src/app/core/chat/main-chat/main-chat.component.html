@@ -2,14 +2,15 @@
   <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #sn (sideNav)="sn" [mode]="'side'" fixedTopGap="56">
       <ng-template [ngIf]="(friends$ | async)?.friends.length > 0">
-        <chat-friends-list #friendsList [title]="'Friends'" [list]="(friends$ | async)?.friends" (click)="selectUser(friendsList)"></chat-friends-list>
+        <chat-friends-list #friendsList [title]="'Friends'" [list]="(friends$ | async)?.friends"
+          (click)="chatBase.selectUser(friendsList)"></chat-friends-list>
       </ng-template>
       <ng-template [ngIf]="(friends$ | async)?.friends.length === 0">
         <mat-toolbar>
           <mat-toolbar-row>
             <p>Friends:</p>
             <span class="spacer"></span>
-            <button mat-button (click)="clickClose()">
+            <button mat-button (click)="clickMenu()">
               <mat-icon>close</mat-icon>
             </button>
           </mat-toolbar-row>
@@ -18,7 +19,7 @@
       </ng-template>
     </mat-sidenav>
     <mat-sidenav-content>
-      <chat-base-content></chat-base-content>
+      <chat-base-content #chatBase></chat-base-content>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

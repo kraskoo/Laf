@@ -1,8 +1,17 @@
-<mat-grid-list cols="3" rowHeight="8.5vh" [gutterSize]="2">
-  <mat-grid-tile [colspan]="3" [rowspan]="8" [style.background]="'lightgreen'">
-    Chat
+<mat-grid-list cols="3" rowHeight="8%" [gutterSize]="2">
+  <mat-grid-tile [colspan]="3" [rowspan]="10">
+    <div class="full-size" id="chat-container">
+      <div class="bottom-to-top" id="chat-content"></div>
+    </div>
   </mat-grid-tile>
-  <mat-grid-tile [colspan]="3" [rowspan]="1" [style.background]="'lightpink'">
-    Messages
+  <mat-grid-tile [colspan]="3" [rowspan]="2">
+    <ng-template [ngIf]="!selectedUser">
+      <p>Select user to chat with</p>
+    </ng-template>
+    <ng-template [ngIf]="selectedUser">
+      <mat-form-field [style.width]="'80vw'" [style.padding]="'10px auto !important;'">
+        <input matInput #message placeholder="Message" autocomplete="off" (keydown)="proccessMessage($event, message)">
+      </mat-form-field>
+    </ng-template>
   </mat-grid-tile>
 </mat-grid-list>

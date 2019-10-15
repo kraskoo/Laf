@@ -18,16 +18,12 @@
     [Route("[controller]")]
     public class AccountController : BaseController
     {
-        private readonly IUserService userService;
         private readonly IUserFriendService userFriendService;
 
         public AccountController(
             IUserService userService,
-            IUserFriendService userFriendService)
-        {
-            this.userService = userService;
-            this.userFriendService = userFriendService;
-        }
+            IUserFriendService userFriendService) : base(userService)
+            => this.userFriendService = userFriendService;
 
         [HttpGet]
         [Route("[action]")]
@@ -36,7 +32,7 @@
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Reject([FromBody] FriendBindingModel model)
+        public async Task<IActionResult> Reject([FromBody]FriendBindingModel model)
         {
             var userId = model.Id;
             var result = await this.ValidateFriend(userId);
@@ -103,7 +99,7 @@
         [Route("[action]")]
         public IActionResult Login([FromBody]UserLoginBindingModel model)
         {
-            var response = this.userService.Authenticate(
+            var response = this.UserServices.Authenticate(
                                model.Email,
                                model.Password,
                                this.HttpContext,
@@ -148,22 +144,22 @@
                                Email = model.Email,
                                UserName = model.Email
                            };
-            var role = !await this.userService.AnyAsync() ?
+            var role = !await this.UserServices.AnyAsync() ?
                            nameof(RoleType.Administrator) :
                            nameof(RoleType.Regular);
-            var creationResult = await this.userService.CreateAsync(user, model.Password);
+            var creationResult = await this.UserServices.CreateAsync(user, model.Password);
             if (!creationResult.Succeeded)
             {
                 return this.BadRequest(this.ModelState);
             }
 
-            var addToRoleResult = await this.userService.AddToRoleAsync(user, role);
+            var addToRoleResult = await this.UserServices.AddToRoleAsync(user, role);
             if (!addToRoleResult.Succeeded)
             {
                 return this.BadRequest(addToRoleResult.GetAllErrors(this.ModelState));
             }
 
-            var response = this.userService.Authenticate(
+            var response = this.UserServices.Authenticate(
                                model.Email,
                                model.Password,
                                this.HttpContext,
@@ -200,7 +196,7 @@
             var users = new HashSet<User>();
             foreach (var role in enumerableRoles)
             {
-                var usersInRole = await this.userService.GetUsersInRoleAsync(role);
+                var usersInRole = await this.UserServices.GetUsersInRoleAsync(role);
                 foreach (var user in usersInRole)
                 {
                     users.Add(user);
@@ -237,13 +233,13 @@
 
             return this.Ok(
                 !string.IsNullOrEmpty(search) ?
-                    this.userService.UsersWithoutFriendshipWithCurrentUser(
+                    this.UserServices.UsersWithoutFriendshipWithCurrentUser(
                             id,
                             u => u.FirstName.ToLower().Contains(search) ||
                                  u.LastName.ToLower().Contains(search) ||
                                  u.Email.ToLower().Contains(search))
                         .To<UserViewModel>() :
-                    this.userService.UsersWithoutFriendshipWithCurrentUser(id)
+                    this.UserServices.UsersWithoutFriendshipWithCurrentUser(id)
                         .To<UserViewModel>());
         }
 
@@ -297,24 +293,6 @@
             }
 
             return this.Ok();
-        }
-
-        private async Task<IActionResult> ValidateFriend(string friendId)
-        {
-            if (string.IsNullOrEmpty(friendId))
-            {
-                this.ModelState.AddModelError("Empty Id", "You must provide User Id!");
-                return this.BadRequest(this.ModelState);
-            }
-
-            var friend = await this.userService.FindByIdAsync(friendId);
-            if (friend == null)
-            {
-                this.ModelState.AddModelError("Non existing user", "You must provide existing User Id!");
-                return this.BadRequest(this.ModelState);
-            }
-
-            return null;
         }
     }
 }

@@ -1,7 +1,7 @@
 <mat-toolbar color="primary" [class.mat-elevation-z2]="true" role="heading">
   <mat-toolbar-row>
     <ng-template [ngIf]="isInChatRoom">
-      <button mat-icon-button (click)="clickSideNav()" matTooltip="Friends list" [matTooltipPosition]="'below'">
+      <button mat-icon-button (click)="clickMenu()" matTooltip="Friends list" [matTooltipPosition]="'below'">
         <mat-icon>menu</mat-icon>
       </button>
       <a mat-icon-button routerLink="/chat/invitations" matTooltip="Invitations" [matTooltipPosition]="'below'">

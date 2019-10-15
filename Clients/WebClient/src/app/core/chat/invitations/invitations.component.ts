@@ -22,7 +22,7 @@ export class InvitationsComponent implements OnInit {
     private bottomSheet: MatBottomSheet,
     private accountService: AccountService) {
     // tslint:disable-next-line: only-arrow-functions
-    this.router.routeReuseStrategy.shouldReuseRoute = function () { return false; };
+    this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; };
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         // Trick the Router into believing it's last link wasn't previously loaded

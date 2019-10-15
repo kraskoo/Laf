@@ -2,6 +2,8 @@
 {
     using System;
 
+    using LafAPI.Web.Hubs;
+
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -19,10 +21,19 @@
         public override void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory) =>
             app.UseHsts()
                 .UseHttpsRedirection()
-                .UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
-                .UseMvc(routes => routes.MapRoute("default", "{controller}/{action}/{id?}"));
+                .UseRouting()
+                .UseCors("CorsPolicy"/*x => x.AllowCredentials().AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()*/)
+                .UseAuthentication()
+                .UseAuthorization()
+                .UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapControllerRoute("default", "{controller}/{action}/{id?}");
+                        endpoints.MapHub<ChatHub>("/chat");
+                    });
 
-        public override void ConfigureServices(IServiceCollection services) =>
+        public override void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSignalR();
             services.AddHsts(options =>
                     {
                         options.Preload = true;
@@ -37,8 +48,18 @@
                             options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
                             options.HttpsPort = int.Parse(this.Configuration["Kestrel:Ports:https"]);
                         })
-                .AddCors()
-                .AddMvc(opts => opts.EnableEndpointRouting = false)
+                .AddCors(
+                     options =>
+                         {
+                             options.AddPolicy(
+                                 "CorsPolicy",
+                                 builder => builder.WithOrigins("http://localhost:4200")
+                                     .AllowAnyMethod()
+                                     .AllowAnyHeader()
+                                     .AllowCredentials());
+                         })
+                .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest);
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { User } from '../../models/user.model';
-import { ChatService } from '../../services/chat.service';
+import { SideNavService } from '../../services/side-nav.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -13,14 +13,13 @@ export class FriendsListComponent {
   @Input() title: string;
   @Input() list: User[];
 
-  constructor(private chatService: ChatService) { }
+  constructor(private sideNavService: SideNavService) { }
 
   clickMenu() {
-    this.chatService.clickMenu();
+    this.sideNavService.clickMenu();
   }
 
   selectUser(user: User) {
     this.selectedUser = user;
-    this.clickMenu();
   }
 }

@@ -32,3 +32,9 @@ dotnet_style_qualification_for_field = false:none
 
 # IDE0003: Remove qualification
 dotnet_style_qualification_for_event = false:none
+
+# CA1063: Implement IDisposable Correctly
+dotnet_diagnostic.CA1063.severity = none
+
+# ASP0000: Do not call 'IServiceCollection.BuildServiceProvider' in 'ConfigureServices'
+dotnet_diagnostic.ASP0000.severity = none

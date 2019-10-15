@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { UserService } from '../services/user.service';
 
-const apiUrl = environment.apiURL;
+const { url } = environment;
 
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
@@ -37,7 +37,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
     }
 
     return next.handle(req.clone({
-      url: `${apiUrl}/${req.url}`,
+      url: `${url}/${req.url}`,
       headers: httpHeaders
     })).pipe(catchError((err: HttpErrorResponse) => {
       if (err.status !== 200) {

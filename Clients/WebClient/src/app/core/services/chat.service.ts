@@ -1,19 +1,25 @@
-import { MatSidenav } from '@angular/material/sidenav';
 import { Injectable } from '@angular/core';
+import * as signalR from '@aspnet/signalr';
 
-let sideNavigation: MatSidenav = null;
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
-  get sideNav(): MatSidenav {
-    return sideNavigation;
+  private hubConnection: signalR.HubConnection;
+  private chatUrl = `chat`;
+
+  startConnection() {
+    const builder = new signalR.HubConnectionBuilder().withUrl(`${environment.url}/${this.chatUrl}`);
+    this.hubConnection = builder.build();
+    this.hubConnection.start().then(() => console.log('Connection started!')).catch(console.error);
   }
 
-  set sideNav(value: MatSidenav) {
-    sideNavigation = value;
+  messageTo(user: string, message: string) {
+    this.hubConnection.invoke('SendMessage', user, message);
   }
 
-  clickMenu() {
-    sideNavigation.toggle();
+  initRevieceMessage(onReceiveCb) {
+    // tslint:disable-next-line: only-arrow-functions
+    this.hubConnection.on('ReceiveMessage', onReceiveCb);
   }
 }

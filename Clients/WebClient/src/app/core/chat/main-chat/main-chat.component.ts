@@ -6,11 +6,11 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { User } from '../../models/user.model';
 import { UserFriends } from '../../models/user-friends.model';
 import { AccountService } from '../../services/account.service';
-import { ChatService } from '../../services/chat.service';
 
 import { FriendsListComponent } from '../friends-list/friends-list.component';
 
 import { config } from '../../services/configuration.service';
+import { SideNavService } from '../../services/side-nav.service';
 
 @Component({
   selector: 'app-main-chat',
@@ -22,27 +22,25 @@ export class MainChatComponent implements OnInit, OnDestroy {
   selectedUser?: User;
   @ViewChild(MatSidenav, { static: false })
   set sideNav(value: MatSidenav) {
-    this.chatService.sideNav = value;
+    this.sideNavService.sideNav = value;
   }
 
   constructor(
     private accountService: AccountService,
-    private chatService: ChatService) {
+    private sideNavService: SideNavService) {
     config.inChatPage = true;
   }
 
   ngOnInit(): void {
     this.friends$ = this.accountService.friends(true);
-    // tslint:disable-next-line: no-string-literal
-    // this.friends = this.route.snapshot.data['friends'];
   }
 
   ngOnDestroy(): void {
     config.inChatPage = false;
   }
 
-  clickClose() {
-    this.chatService.clickMenu();
+  clickMenu() {
+    this.sideNavService.clickMenu();
   }
 
   selectUser(fl: FriendsListComponent) {
