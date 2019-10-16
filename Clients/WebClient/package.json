@@ -1,9 +1,9 @@
 {
   "name": "laf-angular",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --ssl true --ssl-cert \"./ssl/server.crt\" --ssl-key \"./ssl/server.key\" --host 0.0.0.0 --disable-host-check --open",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

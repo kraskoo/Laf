@@ -6,11 +6,11 @@ import { UserService } from '../../services/user.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
-  selector: 'chat-base-content',
-  templateUrl: './base-content.component.html',
-  styleUrls: ['./base-content.component.css']
+  selector: 'contacts',
+  templateUrl: './contacts.component.html',
+  styleUrls: ['./contacts.component.css']
 })
-export class BaseContentComponent implements OnInit {
+export class ContactsComponent implements OnInit {
   selectedUser: User;
   currentMessage = '';
 

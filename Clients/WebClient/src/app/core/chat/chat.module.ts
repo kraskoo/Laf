@@ -22,14 +22,14 @@ import { MainChatComponent } from './main-chat/main-chat.component';
 
 import { ChatRoutingModule } from './chat-routing.module';
 import { FriendsListComponent } from './friends-list/friends-list.component';
-import { BaseContentComponent } from './base-content/base-content.component';
 import { InvitationsComponent, UserResultComponent } from './invitations/invitations.component';
+import { ContactsComponent } from './contacts/contacts.component';
 
 @NgModule({
   declarations: [
     MainChatComponent,
     FriendsListComponent,
-    BaseContentComponent,
+    ContactsComponent,
     UserResultComponent,
     InvitationsComponent
   ],
