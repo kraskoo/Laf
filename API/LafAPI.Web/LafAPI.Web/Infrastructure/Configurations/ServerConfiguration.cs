@@ -22,7 +22,7 @@
             app.UseHsts()
                 .UseHttpsRedirection()
                 .UseRouting()
-                .UseCors("CorsPolicy"/*x => x.AllowCredentials().AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()*/)
+                .UseCors("CorsPolicy")
                 .UseAuthentication()
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>

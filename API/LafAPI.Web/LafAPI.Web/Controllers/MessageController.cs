@@ -8,7 +8,6 @@
     using LafAPI.Web.Models.Account;
     using LafAPI.Web.Models.Message;
 
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
@@ -32,14 +31,6 @@
             return this.Ok(await this.messageService.GetAll(this.User.GetId(), friendId)
                                .To<MessageViewModel>()
                                .ToListAsync());
-        }
-
-        [AllowAnonymous]
-        [HttpGet]
-        [Route("[action]")]
-        public IActionResult Test()
-        {
-            return this.Ok("Test");
         }
 
         [HttpPost]

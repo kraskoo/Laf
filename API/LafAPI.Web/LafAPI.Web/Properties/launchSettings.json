@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:58642/",
-      "sslPort": 0
+      "applicationUrl": "http://localhost:52590",
+      "sslPort": 44347
     }
   },
   "profiles": {
@@ -15,13 +15,30 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "LafAPI.Web": {
+    "Kestrel - Production": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production"
+      },
+      "applicationUrl": ""
+    },
+    "Kestrel - Staging": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Staging"
+      },
+      "applicationUrl": ""
+    },
+    "Kestrel - Development": {
+      "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:58644/"
+      "applicationUrl": ""
+    },
+    "Azure Dev Spaces": {
+      "commandName": "AzureDevSpaces",
+      "launchBrowser": true
     }
   }
 }
