@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { ChatService } from '../../services/chat.service';
 import { User } from '../../models/user.model';
 import { FriendsListComponent } from '../friends-list/friends-list.component';
@@ -11,6 +11,7 @@ import { UserService } from '../../services/user.service';
   styleUrls: ['./contacts.component.css']
 })
 export class ContactsComponent implements OnDestroy {
+  @ViewChild('container', { static: false }) container: ElementRef;
   selectedUser: User;
   currentMessage = '';
 
@@ -29,7 +30,6 @@ export class ContactsComponent implements OnDestroy {
   onReviece(id: string, message: string) {
     const currentDate = new Date(Date.now());
     const dt = `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`;
-    const chatContent = document.getElementById('chat-content');
     const p = document.createElement('p');
     p.classList.add('cht-msg');
     if (this.userService.user.id === id) {
@@ -40,7 +40,11 @@ export class ContactsComponent implements OnDestroy {
       p.textContent = `[${dt}] ${this.selectedUser.firstName} ${this.selectedUser.lastName}: ${message}`;
     }
 
-    chatContent.insertBefore(p, chatContent.children.item[chatContent.children.item.length - 1]);
+    const container = this.container.nativeElement;
+    const parent = container.parentElement;
+    container.insertBefore(p, container.children[container.children.length]);
+    const length = container.children.length - 1;
+    parent.scrollTop = container.scrollHeight - container.clientHeight + container.children[length].clientHeight;
   }
 
   selectUser(friendsList: FriendsListComponent) {
@@ -58,8 +62,6 @@ export class ContactsComponent implements OnDestroy {
       this.sendMessage(this.currentMessage);
       // tslint:disable-next-line: no-string-literal
       this.currentMessage = ev.target['value'] = '';
-      const chatContainer = document.querySelector('#chat-container');
-      chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
     }
   }
 }
