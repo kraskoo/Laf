@@ -5,5 +5,5 @@
 
 * For running ``ng`` on http, use ``ng serve``
 * For running ``ng`` on https
-	* Install generated ssl certificate
+	* Install generated ssl certificate with `Trusted Root Certification Authorities`
 	* Use ``npm start``
