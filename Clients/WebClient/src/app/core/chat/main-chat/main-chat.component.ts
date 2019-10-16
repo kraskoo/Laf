@@ -17,8 +17,9 @@ import { SideNavService } from '../../services/side-nav.service';
   templateUrl: './main-chat.component.html',
   styleUrls: ['./main-chat.component.css']
 })
-export class MainChatComponent implements OnInit, OnDestroy {
-  friends$: Observable<UserFriends>;
+export class MainChatComponent implements OnDestroy {
+  private friends$: Observable<UserFriends> = this.accountService.friends(true);
+  friends: UserFriends;
   selectedUser?: User;
   @ViewChild(MatSidenav, { static: false })
   set sideNav(value: MatSidenav) {
@@ -29,10 +30,7 @@ export class MainChatComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     private sideNavService: SideNavService) {
     config.inChatPage = true;
-  }
-
-  ngOnInit(): void {
-    this.friends$ = this.accountService.friends(true);
+    this.friends$.subscribe(data => this.friends = data);
   }
 
   ngOnDestroy(): void {

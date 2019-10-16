@@ -1,5 +1,5 @@
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { throwError, of } from 'rxjs';
+import { throwError, EMPTY, never } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
@@ -15,31 +15,34 @@ export class AppHttpInterceptor implements HttpInterceptor {
     private router: Router) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
+    const hasLoggedinUser = this.userService.hasLoggedinUser();
     let httpHeaders: HttpHeaders;
     if (!(req.url.endsWith('/login') || req.url.endsWith('/register'))) {
-      if (this.userService.user) {
+      if (hasLoggedinUser) {
         const expiresIn = this.userService.user.expiresIn;
         const sessionExpired = new Date(Date.now()) > new Date(Date.now() + expiresIn);
         if (sessionExpired) {
           this.userService.removeUser();
           this.router.navigate(['/account/login']);
-          return of(null as any);
+          return EMPTY;
         }
       }
     }
 
-    if (req.url.endsWith('/invitationscount') && !this.userService.user) {
-      return of(null as any);
+    if (req.url.endsWith('/invitationscount') && !hasLoggedinUser) {
+      return EMPTY;
     }
 
-    if (this.userService.user && this.userService.user.token !== '') {
+    if (hasLoggedinUser) {
       httpHeaders = req.headers.append('Authorization', `Bearer ${this.userService.user.token}`);
     }
 
-    return next.handle(req.clone({
+    req = req.clone({
       url: `${url}/${req.url}`,
-      headers: httpHeaders
-    })).pipe(catchError((err: HttpErrorResponse) => {
+      headers: httpHeaders,
+      withCredentials: true
+    });
+    return next.handle(req).pipe(catchError((err: HttpErrorResponse) => {
       if (err.status !== 200) {
         this.router.navigate(['/bad-request', err.message]);
       }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ChatService } from '../../services/chat.service';
 import { User } from '../../models/user.model';
 import { FriendsListComponent } from '../friends-list/friends-list.component';
@@ -10,33 +10,37 @@ import { UserService } from '../../services/user.service';
   templateUrl: './contacts.component.html',
   styleUrls: ['./contacts.component.css']
 })
-export class ContactsComponent implements OnInit {
+export class ContactsComponent implements OnDestroy {
   selectedUser: User;
   currentMessage = '';
 
   constructor(
     private userService: UserService,
-    private chatService: ChatService) { }
+    private chatService: ChatService) {
+      this.chatService.startConnection();
+      // tslint:disable-next-line: only-arrow-functions
+      this.chatService.initRevieceMessage((id: string, message: string) => this.onReviece(id, message));
+    }
 
-  ngOnInit(): void {
-    this.chatService.startConnection();
-    // tslint:disable-next-line: only-arrow-functions
-    this.chatService.initRevieceMessage((id: string, message: string) => {
-      const currentDate = new Date(Date.now());
-      const dt = `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`;
-      const chatContent = document.getElementById('chat-content');
-      const p = document.createElement('p');
-      p.classList.add('cht-msg');
-      if (this.userService.user.id === id) {
-        p.classList.add('mine-msg');
-        p.textContent = `[${dt}] ${this.userService.user.firstName} ${this.userService.user.lastName}: ${message}`;
-      } else {
-        p.classList.add('yours-msg');
-        p.textContent = `[${dt}] ${this.selectedUser.firstName} ${this.selectedUser.lastName}: ${message}`;
-      }
+  ngOnDestroy(): void {
+    this.chatService.stopConnection(this.onReviece);
+  }
 
-      chatContent.insertBefore(p, chatContent.children.item[chatContent.children.item.length - 1]);
-    });
+  onReviece(id: string, message: string) {
+    const currentDate = new Date(Date.now());
+    const dt = `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`;
+    const chatContent = document.getElementById('chat-content');
+    const p = document.createElement('p');
+    p.classList.add('cht-msg');
+    if (this.userService.user.id === id) {
+      p.classList.add('mine-msg');
+      p.textContent = `[${dt}] ${this.userService.user.firstName} ${this.userService.user.lastName}: ${message}`;
+    } else {
+      p.classList.add('yours-msg');
+      p.textContent = `[${dt}] ${this.selectedUser.firstName} ${this.selectedUser.lastName}: ${message}`;
+    }
+
+    chatContent.insertBefore(p, chatContent.children.item[chatContent.children.item.length - 1]);
   }
 
   selectUser(friendsList: FriendsListComponent) {
@@ -47,11 +51,13 @@ export class ContactsComponent implements OnInit {
     this.chatService.messageTo(this.userService.user.id, text);
   }
 
-  proccessMessage(ev: KeyboardEvent, input: HTMLInputElement) {
-    this.currentMessage = input.value;
+  proccessMessage(ev: KeyboardEvent) {
+    // tslint:disable-next-line: no-string-literal
+    this.currentMessage = ev.target['value'];
     if (ev.key === 'Enter') {
       this.sendMessage(this.currentMessage);
-      this.currentMessage = input.value = '';
+      // tslint:disable-next-line: no-string-literal
+      this.currentMessage = ev.target['value'] = '';
       const chatContainer = document.querySelector('#chat-container');
       chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
     }

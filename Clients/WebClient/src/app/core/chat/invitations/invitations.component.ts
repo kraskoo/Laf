@@ -1,4 +1,4 @@
-import { Component, ViewChild, Inject, OnInit } from '@angular/core';
+import { Component, ViewChild, Inject, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatBottomSheet, MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material';
 import { AccountService } from '../../services/account.service';
@@ -12,8 +12,9 @@ import { UserFriends } from '../../models/user-friends.model';
   templateUrl: './invitations.component.html',
   styleUrls: ['./invitations.component.css']
 })
-export class InvitationsComponent implements OnInit {
-  friends$: Observable<UserFriends>;
+export class InvitationsComponent {
+  private friends$: Observable<UserFriends> = this.accountService.friends(true);
+  friends: UserFriends;
   selectedUser?: User;
   @ViewChild(NgForm, { static: false }) form: NgForm;
 
@@ -25,16 +26,10 @@ export class InvitationsComponent implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; };
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        // Trick the Router into believing it's last link wasn't previously loaded
         this.router.navigated = false;
       }
     });
-  }
-
-  ngOnInit(): void {
-    this.friends$ = this.accountService.friends(true);
-    // tslint:disable-next-line: no-string-literal
-    // this.friends = this.route.snapshot.data['friends'];
+    this.friends$.subscribe(data => this.friends = data);
   }
 
   openBottomSheet(text: string): void {

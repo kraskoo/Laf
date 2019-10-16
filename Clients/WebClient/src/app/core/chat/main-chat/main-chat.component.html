@@ -1,11 +1,11 @@
 <div class="container" *ngIf="isInChatRoom">
   <mat-sidenav-container class="sidenav-container">
     <mat-sidenav #sn (sideNav)="sn" [mode]="'side'" fixedTopGap="56">
-      <ng-template [ngIf]="(friends$ | async)?.friends.length > 0">
-        <chat-friends-list #friendsList [title]="'Friends'" [list]="(friends$ | async)?.friends"
+      <ng-template [ngIf]="friends?.friends.length > 0">
+        <chat-friends-list #friendsList [title]="'Friends'" [list]="friends?.friends"
           (click)="contacts.selectUser(friendsList)"></chat-friends-list>
       </ng-template>
-      <ng-template [ngIf]="(friends$ | async)?.friends.length === 0">
+      <ng-template [ngIf]="friends?.friends.length === 0">
         <mat-toolbar>
           <mat-toolbar-row>
             <p>Friends:</p>

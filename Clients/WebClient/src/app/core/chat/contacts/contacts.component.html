@@ -10,7 +10,7 @@
     </ng-template>
     <ng-template [ngIf]="selectedUser">
       <mat-form-field [style.width]="'80vw'" [style.padding]="'10px auto !important;'">
-        <input matInput #message placeholder="Message" autocomplete="off" (keydown)="proccessMessage($event, message)">
+        <input matInput placeholder="Message" autocomplete="off" (keydown)="proccessMessage($event)">
       </mat-form-field>
     </ng-template>
   </mat-grid-tile>

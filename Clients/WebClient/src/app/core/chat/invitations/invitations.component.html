@@ -16,8 +16,8 @@
         <p>Friends:</p>
       </mat-toolbar-row>
     </mat-toolbar>
-    <ng-template [ngIf]="(friends$ | async)?.friends.length > 0">
-      <mat-nav-list *ngFor="let friend of (friends$ | async)?.friends">
+    <ng-template [ngIf]="friends?.friends.length > 0">
+      <mat-nav-list *ngFor="let friend of friends?.friends">
         <div class="flmfb">
           <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
           <span class="spacer"></span>
@@ -32,8 +32,8 @@
         <p>Blocked Users</p>
       </mat-toolbar-row>
     </mat-toolbar>
-    <ng-template [ngIf]="(friends$ | async)?.blockedUsers.length > 0">
-      <mat-nav-list *ngFor="let friend of (friends$ | async)?.blockedUsers">
+    <ng-template [ngIf]="friends?.blockedUsers.length > 0">
+      <mat-nav-list *ngFor="let friend of friends?.blockedUsers">
         <div class="flmfb">
           <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
           <span class="spacer"></span>
@@ -48,8 +48,8 @@
         <p>Invitations</p>
       </mat-toolbar-row>
     </mat-toolbar>
-    <ng-template [ngIf]="(friends$ | async)?.invitations.length > 0">
-      <mat-nav-list *ngFor="let friend of (friends$ | async)?.invitations">
+    <ng-template [ngIf]="friends?.invitations.length > 0">
+      <mat-nav-list *ngFor="let friend of friends?.invitations">
         <div class="flmfb">
           <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
           <span class="spacer"></span>
@@ -65,8 +65,8 @@
         <p>Invited Users</p>
       </mat-toolbar-row>
     </mat-toolbar>
-    <ng-template [ngIf]="(friends$ | async)?.invitedUsers.length > 0">
-      <mat-nav-list *ngFor="let friend of (friends$ | async)?.invitedUsers">
+    <ng-template [ngIf]="friends?.invitedUsers.length > 0">
+      <mat-nav-list *ngFor="let friend of friends?.invitedUsers">
         <div class="flmfb">
           <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
           <span class="spacer"></span>

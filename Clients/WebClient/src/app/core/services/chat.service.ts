@@ -14,6 +14,11 @@ export class ChatService {
     this.hubConnection.start().then(() => console.log('Connection started!')).catch(console.error);
   }
 
+  stopConnection(onReceiveCb) {
+    this.hubConnection.off('ReceiveMessage', onReceiveCb);
+    this.hubConnection.stop().then(() => console.log('Connection stopped!')).catch(console.error);
+  }
+
   messageTo(user: string, message: string) {
     this.hubConnection.invoke('SendMessage', user, message);
   }
