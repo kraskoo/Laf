@@ -33,7 +33,7 @@ export class InvitationsComponent {
   }
 
   openBottomSheet(text: string): void {
-    this.accountService.users(text).subscribe((users: User[]) => {
+    this.accountService.users(text).subscribe((users: UserFriends[]) => {
       this.bottomSheet.open(UserResultComponent, { data: users });
     });
   }

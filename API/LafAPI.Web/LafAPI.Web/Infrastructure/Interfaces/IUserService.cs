@@ -44,6 +44,8 @@
 
         Task<IList<User>> GetUsersInRoleAsync(string roleName);
 
+        Task<IList<string>> GetRolesAsync(User user);
+
         Task<User> FindByIdAsync(string userId);
 
         Task<User> FindByNameAsync(string userName);

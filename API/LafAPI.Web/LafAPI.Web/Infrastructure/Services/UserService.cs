@@ -22,6 +22,7 @@
     public class UserService : IUserService
     {
         public const string SuccessfullyAuthentication = "Successfully Authentication";
+        public const string InvalidState = "Ivalid object state!";
         public const string InvalidEmail = "User with this userName doesn't exist!";
         public const string InvalidPassword = "Invalid Password!";
         private readonly UserManager<User> userManager;
@@ -65,6 +66,11 @@
                     this.userManager.PrincipalResolver(email, password, out user))
                 .GetAwaiter()
                 .GetResult();
+            if (response == null)
+            {
+                return new LoginResponse { Result = InvalidState };
+            }
+
             response.Result = SuccessfullyAuthentication;
             if (user == null)
             {
@@ -114,6 +120,9 @@
 
         public Task<IList<User>> GetUsersInRoleAsync(string roleName) =>
             this.userManager.GetUsersInRoleAsync(roleName);
+
+        public Task<IList<string>> GetRolesAsync(User user) =>
+            this.userManager.GetRolesAsync(user);
 
         public Task<User> FindByIdAsync(string userId) =>
             this.userManager.FindByIdAsync(userId);

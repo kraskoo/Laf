@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { AccountService } from '../../services/account.service';
 import { Router } from '@angular/router';
+import { RouterService } from '../../services/router.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,10 @@ export class LoginComponent {
   constructor(
     private userService: UserService,
     private accountService: AccountService,
-    private router: Router) { }
+    private router: Router,
+    public routerService: RouterService) {
+      this.routerService.handShakeAndBackTo('/');
+    }
 
   onSubmit(): void {
     if (this.form.valid) {
@@ -25,7 +29,7 @@ export class LoginComponent {
       const password = this.form.value.password;
       this.accountService.login(email, password).subscribe(user => {
         user.expires = new Date(user.expiresIn);
-        this.userService.addUser(user);
+        this.userService.assignToCurrentUser(user);
         this.router.navigate(['/']);
         this.isLoading = false;
       });

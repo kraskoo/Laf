@@ -10,6 +10,7 @@
 
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [AutoValidateAntiforgeryToken]
     public abstract class BaseController : ControllerBase
     {
         protected BaseController(IUserService userService)

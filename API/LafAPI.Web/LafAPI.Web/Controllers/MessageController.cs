@@ -8,6 +8,7 @@
     using LafAPI.Web.Models.Account;
     using LafAPI.Web.Models.Message;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,14 @@
         public MessageController(IMessageService messageService, IUserService userService) : base(userService)
             => this.messageService = messageService;
 
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("[action]/{message}")]
+        [IgnoreAntiforgeryToken]
+        public IActionResult HandShake(string message) => this.Ok(message);
+
+        [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> Messages(FriendBindingModel model)
         {
             var friendId = model.Id;

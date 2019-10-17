@@ -1,8 +1,9 @@
 import { Component, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { AccountService } from '../../services/account.service';
+import { UserService } from '../../services/user.service';
 import { ChatService } from '../../services/chat.service';
 import { User } from '../../models/user.model';
 import { FriendsListComponent } from '../friends-list/friends-list.component';
-import { UserService } from '../../services/user.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -16,6 +17,7 @@ export class ContactsComponent implements OnDestroy {
   currentMessage = '';
 
   constructor(
+    private accountService: AccountService,
     private userService: UserService,
     private chatService: ChatService) {
       this.chatService.startConnection();
@@ -35,9 +37,22 @@ export class ContactsComponent implements OnDestroy {
     if (this.userService.user.id === id) {
       p.classList.add('mine-msg');
       p.textContent = `[${dt}] ${this.userService.user.firstName} ${this.userService.user.lastName}: ${message}`;
-    } else {
+    } else if (this.selectedUser.id === id) {
       p.classList.add('yours-msg');
       p.textContent = `[${dt}] ${this.selectedUser.firstName} ${this.selectedUser.lastName}: ${message}`;
+    } else {
+      const thisUser = this.userService.get(id);
+      const didUserExists = thisUser !== null;
+      if (!didUserExists) {
+        this.accountService.getById(id).subscribe(data => {
+          this.userService.add(data);
+          p.textContent = `[${dt}] ${data.firstName} ${data.lastName}: ${message}`;
+          console.log(p);
+        });
+      } else {
+        p.classList.add('yours-msg');
+        p.textContent = `[${dt}] ${thisUser.firstName} ${thisUser.lastName}: ${message}`;
+      }
     }
 
     const container = this.container.nativeElement;

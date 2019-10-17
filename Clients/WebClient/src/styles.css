@@ -58,13 +58,11 @@ html, body {
 }
 
 .cht-msg {
-  font-family: 'Roboto';
   font-size: 20px;
   font-weight: 600;
   padding: 8px;
   margin: 4px 0;
   font-size: 15px;
-  font-family: 'Roboto';
   border-radius: 18px;
   color: whitesmoke;
 }

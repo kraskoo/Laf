@@ -8,6 +8,7 @@
     using LafAPI.Data.Models;
     using LafAPI.Web.Infrastructure.Extensions;
     using LafAPI.Web.Infrastructure.Interfaces;
+    using LafAPI.Web.Infrastructure.Models;
     using LafAPI.Web.Infrastructure.Services;
     using LafAPI.Web.Models.Account;
 
@@ -97,6 +98,7 @@
         [HttpPost]
         [AllowAnonymous]
         [Route("[action]")]
+        [IgnoreAntiforgeryToken]
         public IActionResult Login([FromBody]UserLoginBindingModel model)
         {
             var response = this.UserServices.Authenticate(
@@ -130,6 +132,7 @@
         [HttpPost]
         [AllowAnonymous]
         [Route("[action]")]
+        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Register([FromBody]UserRegisterBindingModel model)
         {
             if (model == null || !this.ModelState.IsValid)
@@ -184,6 +187,23 @@
             response.FirstName = user.FirstName;
             response.LastName = user.LastName;
             response.Email = user.Email;
+            return this.Ok(response);
+        }
+
+        [HttpGet]
+        [Route("[action]/{id:guid}")]
+        public async Task<IActionResult> ById(string id)
+        {
+            var user = await this.UserServices.FindByIdAsync(id);
+            var roles = await this.UserServices.GetRolesAsync(user);
+            var response = new LoginResponse
+                               {
+                                   Id = user.Id,
+                                   FirstName = user.FirstName,
+                                   LastName = user.LastName,
+                                   Email = user.Email,
+                                   Roles = roles
+                               };
             return this.Ok(response);
         }
 

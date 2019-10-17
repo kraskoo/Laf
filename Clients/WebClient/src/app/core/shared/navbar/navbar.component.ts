@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { User } from '../../models/user.model';
+import { AccountOwner } from '../../models/user.model';
 
 import { UserService } from '../../services/user.service';
 import { config } from '../../services/configuration.service';
@@ -42,12 +42,12 @@ export class NavbarComponent implements OnInit {
     return this.userService.hasRole('Administrator');
   }
 
-  get user(): User {
+  get user(): AccountOwner {
     return this.userService.user;
   }
 
   logout(): void {
-    this.userService.removeUser();
+    this.userService.removeCurrentUser();
     this.router.navigate(['/']);
   }
 }
