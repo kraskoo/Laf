@@ -22,9 +22,10 @@
 
         [HttpPost]
         [AllowAnonymous]
-        [Route("[action]/{message}")]
+        [Route("")]
+        [Route("hs")]
         [IgnoreAntiforgeryToken]
-        public IActionResult HandShake(string message) => this.Ok(message);
+        public IActionResult HandShake() => this.Ok("hi");
 
         [HttpPost]
         [Route("[action]")]

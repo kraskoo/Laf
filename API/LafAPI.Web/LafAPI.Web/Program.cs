@@ -40,8 +40,8 @@
                                 {
                                     opts.UseHttps();
                                 });
-                        options.Limits.MaxConcurrentConnections = 10000;
-                        options.Limits.MaxConcurrentUpgradedConnections = 10000;
+                        options.Limits.MaxConcurrentConnections = 1000;
+                        options.Limits.MaxConcurrentUpgradedConnections = 1000;
                         options.Limits.MaxRequestBodySize = 10 * 1024;
                         options.Limits.MinRequestBodyDataRate = new MinDataRate(100, TimeSpan.FromSeconds(10));
                         options.Limits.MinResponseDataRate = new MinDataRate(100, TimeSpan.FromSeconds(10));

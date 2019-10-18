@@ -1,11 +1,15 @@
 ﻿namespace LafAPI.Web.Infrastructure.Configurations
 {
     using System;
+    using System.Linq;
 
     using LafAPI.Web.Hubs;
+    using LafAPI.Web.Infrastructure.Common;
     using LafAPI.Web.Infrastructure.Extensions;
 
     using Microsoft.AspNetCore.Antiforgery;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -21,75 +25,45 @@
         private readonly string[] origins;
 
         public ServerConfiguration(IConfiguration configuration) : base(configuration)
-            => this.origins = new[]
-                               {
-                                   "http://localhost:4200",
-                                   "https://localhost:4200",
-                                   "http://0.0.0.0:4200",
-                                   "https://0.0.0.0:4200",
-                                   "http://127.0.0.1:4200",
-                                   "https://127.0.0.1:4200",
-                                   "http://192.168.0.33:4200",
-                                   "https://192.168.0.33:4200"
-                               };
+            => this.origins = Providers.CreateDomainsByFourth32Bytes(
+                       port: 4200,
+                       fourthBytes: new[] { 33, 101, 102, 103, 104, 105, 106, 107 })
+                   .Concat(new[] { "http://localhost:4200", "https://localhost:4200" })
+                   .ToArray();
 
         public override void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory) =>
             app.UseHsts()
                 .UseHttpsRedirection()
                 .UseRouting()
                 .UseCors(CorsPolicy)
-                .ConfigureWithAntiforgery(app.ApplicationServices.GetRequiredService<IAntiforgery>())
-                .UseAuthentication()
+                .UseCookiePolicy()
+                .UseSession()
+                .ConfigureAuthentication()
                 .UseAuthorization()
+                .ConfigureWithAntiforgery(app.ApplicationServices.GetRequiredService<IAntiforgery>())
                 .UseEndpoints(endpoints =>
                     {
-                        endpoints.MapControllerRoute("default", "{controller}/{action}/{id?}");
                         endpoints.MapHub<ChatHub>("/chat");
-                    })
-                .UseSession();
+                        endpoints.MapHealthChecks("/health");
+                        endpoints.MapDefaultControllerRoute()
+                            .RequireAuthorization(JwtBearerDefaults.AuthenticationScheme);
+                            // .RequireCors(CorsPolicy)
+                    });
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR();
-            services.Configure<CookiePolicyOptions>(options =>
-                    {
-                        options.CheckConsentNeeded = context => true;
-                        options.MinimumSameSitePolicy = SameSiteMode.Strict;
-                    })
-                .AddDistributedMemoryCache()
-                .AddSession(options =>
-                    {
-                        options.Cookie.Name = ".LafAPI.Session";
-                        // Set a short timeout for easy testing.
-                        options.IdleTimeout = TimeSpan.FromSeconds(10);
-                        options.Cookie.HttpOnly = false;
-                        options.Cookie.SecurePolicy = CookieSecurePolicy.None;
-                        // Make the session cookie essential
-                        options.Cookie.IsEssential = true;
-                    })
-                 .AddAntiforgery(options =>
-                     {
-                         // Set Cookie properties using CookieBuilder properties†.
-                         options.HeaderName = XSRF;
-                         options.FormFieldName = "RequestVerificationToken";
-                         options.Cookie.HttpOnly = false;
-                         options.Cookie.SecurePolicy = CookieSecurePolicy.None;
-                         options.Cookie.IsEssential = true;
-                         options.SuppressXFrameOptionsHeader = false;
-                     })
-                .AddHsts(options =>
+            services.AddHsts(options =>
                     {
                         options.Preload = true;
                         options.IncludeSubDomains = true;
-                        options.MaxAge = TimeSpan.FromDays(60);
-                        // options.ExcludedHosts.Add("example.com");
-                        // options.ExcludedHosts.Add("www.example.com");
+                        options.MaxAge = TimeSpan.FromDays(30);
                     })
                 .AddHttpsRedirection(options =>
                     {
                         options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
                         options.HttpsPort = int.Parse(this.Configuration["Kestrel:Ports:https"]);
                     })
+                .AddRouting()
                 .AddCors(options =>
                     {
                         options.AddPolicy(
@@ -98,10 +72,44 @@
                                 builder.WithOrigins(this.origins)
                                     .AllowAnyMethod()
                                     .AllowAnyHeader()
-                                    .AllowCredentials());
+                                    .AllowCredentials()
+                                    .SetPreflightMaxAge(TimeSpan.FromSeconds(2520))
+                                    .Build());
                     })
-                .AddMvc()
+                .Configure<CookiePolicyOptions>(options =>
+                    {
+                        options.CheckConsentNeeded = context => true;
+                        options.MinimumSameSitePolicy = SameSiteMode.None;
+                    })
+                .AddDistributedMemoryCache()
+                .AddSession(options =>
+                    {
+                        options.Cookie.Name = ".LafAPI.Session";
+                        options.IdleTimeout = TimeSpan.FromSeconds(10);
+                        options.Cookie.HttpOnly = false;
+                        options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+                        options.Cookie.IsEssential = true;
+                    })
+                .AddAntiforgery(options =>
+                    {
+                        options.HeaderName = XSRF;
+                        options.FormFieldName = RequestVerificationToken;
+                        options.Cookie.HttpOnly = false;
+                        options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+                        options.Cookie.IsEssential = true;
+                        options.SuppressXFrameOptionsHeader = false;
+                    })
+                .ConfigureAuthentication(this.Configuration)
+                .AddAuthorization(options =>
+                    {
+                        options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                            .RequireAuthenticatedUser()
+                            .Build();
+                    })
+                .AddControllers()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest);
+            services.AddSignalR();
+            services.AddHealthChecks();
         }
     }
 }

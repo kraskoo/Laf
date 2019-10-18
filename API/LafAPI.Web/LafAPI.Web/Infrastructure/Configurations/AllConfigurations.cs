@@ -20,7 +20,6 @@
                                           new EnvironmentConfiguration(configuration),
                                           new IOCConfiguration(configuration),
                                           new DataContextConfiguration(configuration),
-                                          new IdentityConfiguration(configuration),
                                           new ServerConfiguration(configuration)
                                       };
 

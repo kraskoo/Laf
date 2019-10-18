@@ -14,6 +14,7 @@
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("[controller]")]
@@ -97,8 +98,8 @@
 
         [HttpPost]
         [AllowAnonymous]
+        // [DisableCors]
         [Route("[action]")]
-        [IgnoreAntiforgeryToken]
         public IActionResult Login([FromBody]UserLoginBindingModel model)
         {
             var response = this.UserServices.Authenticate(
@@ -131,8 +132,8 @@
 
         [HttpPost]
         [AllowAnonymous]
+        // [DisableCors]
         [Route("[action]")]
-        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Register([FromBody]UserRegisterBindingModel model)
         {
             if (model == null || !this.ModelState.IsValid)
