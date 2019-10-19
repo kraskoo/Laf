@@ -19,12 +19,11 @@ export class ChatService {
     this.hubConnection.stop().then(() => console.log('Connection stopped!')).catch(console.error);
   }
 
-  messageTo(user: string, message: string) {
+  messageFrom(user: string, message: string) {
     this.hubConnection.invoke('SendMessage', user, message);
   }
 
   initRevieceMessage(onReceiveCb) {
-    // tslint:disable-next-line: only-arrow-functions
     this.hubConnection.on('ReceiveMessage', onReceiveCb);
   }
 }

@@ -1,9 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { UserService } from '../../services/user.service';
-import { AccountService } from '../../services/account.service';
-import { Router } from '@angular/router';
+
 import { RouterService } from '../../services/router.service';
+import { CookieService } from '../../services/cookie.service';
+import { AccountService } from '../../services/account.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -15,12 +16,10 @@ export class LoginComponent {
   isLoading = false;
 
   constructor(
+    private routerService: RouterService,
+    private cookieService: CookieService,
     private userService: UserService,
-    private accountService: AccountService,
-    private router: Router,
-    public routerService: RouterService) {
-      this.routerService.handShakeAndBackTo('/');
-    }
+    private accountService: AccountService) { }
 
   onSubmit(): void {
     if (this.form.valid) {
@@ -30,7 +29,8 @@ export class LoginComponent {
       this.accountService.login(email, password).subscribe(user => {
         user.expires = new Date(user.expiresIn);
         this.userService.assignToCurrentUser(user);
-        this.router.navigate(['/']);
+        this.routerService.navigate(['/']);
+        this.cookieService.setAll();
         this.isLoading = false;
       });
     } else {

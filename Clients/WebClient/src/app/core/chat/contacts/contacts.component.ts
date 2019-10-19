@@ -21,7 +21,6 @@ export class ContactsComponent implements OnDestroy {
     private userService: UserService,
     private chatService: ChatService) {
       this.chatService.startConnection();
-      // tslint:disable-next-line: only-arrow-functions
       this.chatService.initRevieceMessage((id: string, message: string) => this.onReviece(id, message));
     }
 
@@ -67,7 +66,7 @@ export class ContactsComponent implements OnDestroy {
   }
 
   sendMessage(text: string) {
-    this.chatService.messageTo(this.userService.user.id, text);
+    this.chatService.messageFrom(this.userService.user.id, text);
   }
 
   proccessMessage(ev: KeyboardEvent) {

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { CookieService } from './cookie.service';
+import { Router, NavigationEnd, NavigationExtras } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class RouterService {
-  constructor(private router: Router, public cookieService: CookieService) { }
+  constructor(private router: Router) { }
 
-  handShakeAndBackTo(url: string) {
+  getBackFrom(where): RouterService {
+    this.getBackFrom.bind(where);
     // tslint:disable-next-line: only-arrow-functions
     this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; };
     this.router.events.subscribe((event) => {
@@ -14,11 +14,14 @@ export class RouterService {
         this.router.navigated = false;
       }
     });
-    if (this.cookieService.empty()) {
-      this.cookieService.handShake().subscribe(() => {
-        this.cookieService.setAll();
-        this.router.navigate([url]);
-      });
+    return this;
+  }
+
+  navigate(commands: any[], extras?: NavigationExtras): void | Promise<boolean> {
+    if (extras) {
+      return this.router.navigate(commands, extras);
     }
+
+    this.router.navigate(commands);
   }
 }

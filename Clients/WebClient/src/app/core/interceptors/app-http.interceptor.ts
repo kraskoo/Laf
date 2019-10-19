@@ -1,10 +1,10 @@
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { throwError, EMPTY, never, Operator, OperatorFunction } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
-import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
+import { throwError, EMPTY } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { UserService } from '../services/user.service';
+import { RouterService } from '../services/router.service';
+import { environment } from '../../../environments/environment';
 
 const { url } = environment;
 
@@ -12,27 +12,24 @@ const { url } = environment;
 export class AppHttpInterceptor implements HttpInterceptor {
   constructor(
     private userService: UserService,
-    private router: Router) { }
+    private routerService: RouterService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    if (req.url.includes('message/handshake')) {
-      return next.handle(req.clone({
-        url: `${url}/${req.url}`,
-        withCredentials: true
-      })).pipe(this.catchError(this.catchErrorFunc));
-    }
-
-    console.log(req.headers);
-    console.log(req.headers.get('X-XSRF-TOKEN'));
+    const wholeUrl = `${url}/${req.url}`;
     const hasLoggedinUser = this.userService.hasLoggedinUser();
-    let httpHeaders: HttpHeaders;
+    let httpHeaders: HttpHeaders = req.headers;
+    const clonedRequest = req.clone({
+      url: wholeUrl,
+      headers: httpHeaders,
+      withCredentials: true
+    });
     if (!(req.url.endsWith('/login') || req.url.endsWith('/register'))) {
       if (hasLoggedinUser) {
         const expiresIn = this.userService.user.expiresIn;
         const sessionExpired = new Date(Date.now()) > new Date(Date.now() + expiresIn);
         if (sessionExpired) {
           this.userService.removeCurrentUser();
-          this.router.navigate(['/account/login']);
+          this.routerService.navigate(['/account/login']);
           return EMPTY;
         }
       }
@@ -43,24 +40,23 @@ export class AppHttpInterceptor implements HttpInterceptor {
     }
 
     if (hasLoggedinUser) {
-      httpHeaders = req.headers.append('Authorization', `Bearer ${this.userService.user.token}`);
+      httpHeaders = req.headers.set('Authorization', `Bearer ${this.userService.user.token}`);
     }
 
-    req = req.clone({
-      url: `${url}/${req.url}`,
-      headers: httpHeaders,
-      withCredentials: true
-    });
-    return next.handle(req).pipe(this.catchError(this.catchErrorFunc));
+    return next.handle(
+      clonedRequest.clone({
+          ...clonedRequest,
+          headers: httpHeaders }))
+        .pipe(this.catchError(this.catchErrorFunc));
   }
 
   catchError(func) {
-    return catchError(func);
+    return catchError(func.bind(this));
   }
 
   catchErrorFunc(err: HttpErrorResponse) {
     if (err.status !== 200) {
-      this.router.navigate(['/bad-request', err.message]);
+      this.routerService.navigate(['/bad-request', err.message]);
     }
 
     return throwError(err);

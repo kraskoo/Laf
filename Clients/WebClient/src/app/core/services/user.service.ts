@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { CookieService } from './cookie.service';
 import { AccountOwner, User, UserById } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private usersById: UserById[] = [];
+
+  constructor(private cookieService: CookieService) { }
 
   add(user: User): void {
     console.log(this.usersById);

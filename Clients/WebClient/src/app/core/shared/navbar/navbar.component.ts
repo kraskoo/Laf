@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+
+import { AccountService } from '../../services/account.service';
+import { UserService } from '../../services/user.service';
+import { RouterService } from '../../services/router.service';
+import { SideNavService } from '../../services/side-nav.service';
 
 import { AccountOwner } from '../../models/user.model';
-
-import { UserService } from '../../services/user.service';
 import { config } from '../../services/configuration.service';
-import { Observable } from 'rxjs';
-import { AccountService } from '../../services/account.service';
-import { SideNavService } from '../../services/side-nav.service';
 
 @Component({
   selector: 'app-navbar',
@@ -20,7 +20,7 @@ export class NavbarComponent implements OnInit {
     private accountService: AccountService,
     private userService: UserService,
     private sideNavService: SideNavService,
-    private router: Router) { }
+    private routerService: RouterService) { }
 
   ngOnInit(): void {
     this.invitationsCount$ = this.accountService.invitationsCount();
@@ -47,7 +47,7 @@ export class NavbarComponent implements OnInit {
   }
 
   logout(): void {
+    this.routerService.navigate(['/']);
     this.userService.removeCurrentUser();
-    this.router.navigate(['/']);
   }
 }

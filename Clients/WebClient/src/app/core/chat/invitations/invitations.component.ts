@@ -1,11 +1,12 @@
-import { Component, ViewChild, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, Inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatBottomSheet, MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material';
-import { AccountService } from '../../services/account.service';
-import { User } from '../../models/user.model';
-import { Router, NavigationEnd } from '@angular/router';
 import { Observable } from 'rxjs';
+
+import { AccountService } from '../../services/account.service';
 import { UserFriends } from '../../models/user-friends.model';
+import { RouterService } from '../../services/router.service';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-invitations',
@@ -19,16 +20,10 @@ export class InvitationsComponent {
   @ViewChild(NgForm, { static: false }) form: NgForm;
 
   constructor(
-    private router: Router,
+    private routerService: RouterService,
     private bottomSheet: MatBottomSheet,
     private accountService: AccountService) {
-    // tslint:disable-next-line: only-arrow-functions
-    this.router.routeReuseStrategy.shouldReuseRoute = function() { return false; };
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.router.navigated = false;
-      }
-    });
+    this.routerService.getBackFrom(this);
     this.friends$.subscribe(data => this.friends = data);
   }
 
@@ -46,31 +41,31 @@ export class InvitationsComponent {
 
   acceptFriend(id: string) {
     this.accountService.acceptFriendship(id).subscribe(() => {
-      this.router.navigate(['/chat/invitations']);
+      this.routerService.navigate(['/chat/invitations']);
     });
   }
 
   reject(id: string) {
     this.accountService.reject(id).subscribe(() => {
-      this.router.navigate(['/chat/invitations']);
+      this.routerService.navigate(['/chat/invitations']);
     });
   }
 
   dropUser(id: string) {
     this.accountService.dropUser(id).subscribe(() => {
-      this.router.navigate(['/chat/invitations']);
+      this.routerService.navigate(['/chat/invitations']);
     });
   }
 
   blockUser(id: string) {
     this.accountService.blockUser(id).subscribe(() => {
-      this.router.navigate(['/chat/invitations']);
+      this.routerService.navigate(['/chat/invitations']);
     });
   }
 
   unblockUser(id: string) {
     this.accountService.unblockUser(id).subscribe(() => {
-      this.router.navigate(['/chat/invitations']);
+      this.routerService.navigate(['/chat/invitations']);
     });
   }
 }
@@ -86,7 +81,7 @@ export class UserResultComponent {
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: User[],
     private bottomSheetRef: MatBottomSheetRef<UserResultComponent>,
-    private router: Router,
+    private routerService: RouterService,
     private accountService: AccountService) { }
 
   closeSearchResults() {
@@ -101,7 +96,7 @@ export class UserResultComponent {
   invite(id: string) {
     this.accountService.addFriend(id).subscribe(() => {
       this.bottomSheetRef.dismiss();
-      this.router.navigate(['/chat/invitations']);
+      this.routerService.navigate(['/chat/invitations']);
     });
   }
 }

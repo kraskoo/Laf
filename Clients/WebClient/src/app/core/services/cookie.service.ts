@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
 export interface Cookie {
   key: string;
@@ -10,10 +9,10 @@ let cookies: Cookie[] = [];
 
 @Injectable({ providedIn: 'root' })
 export class CookieService {
-  constructor(private http: HttpClient) { }
-
-  handShake() {
-    return this.http.post(`message/handshake/hi`, {});
+  getAntiforgery() {
+    const antiforgeryKey = this.keys().filter(ck => ck.toLowerCase().includes('antiforgery'))[0];
+    const value = this.get(antiforgeryKey);
+    return value;
   }
 
   get(key: string) {

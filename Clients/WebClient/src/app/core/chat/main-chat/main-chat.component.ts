@@ -1,16 +1,15 @@
-import { Component, OnDestroy, ViewChild, OnInit } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 
-import { MatSidenav } from '@angular/material/sidenav';
-
-import { User } from '../../models/user.model';
-import { UserFriends } from '../../models/user-friends.model';
 import { AccountService } from '../../services/account.service';
+import { SideNavService } from '../../services/side-nav.service';
 
 import { FriendsListComponent } from '../friends-list/friends-list.component';
 
+import { User } from '../../models/user.model';
+import { UserFriends } from '../../models/user-friends.model';
 import { config } from '../../services/configuration.service';
-import { SideNavService } from '../../services/side-nav.service';
 
 @Component({
   selector: 'app-main-chat',
