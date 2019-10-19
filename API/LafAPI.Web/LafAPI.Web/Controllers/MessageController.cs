@@ -21,13 +21,6 @@
             => this.messageService = messageService;
 
         [HttpPost]
-        [AllowAnonymous]
-        [Route("")]
-        [Route("hs")]
-        [IgnoreAntiforgeryToken]
-        public IActionResult HandShake() => this.Ok("hi");
-
-        [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> Messages(FriendBindingModel model)
         {
