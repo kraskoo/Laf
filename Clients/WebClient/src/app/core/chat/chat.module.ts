@@ -24,6 +24,7 @@ import { ChatRoutingModule } from './chat-routing.module';
 import { FriendsListComponent } from './friends-list/friends-list.component';
 import { InvitationsComponent, UserResultComponent } from './invitations/invitations.component';
 import { ContactsComponent } from './contacts/contacts.component';
+import { ResizableDirective } from '../directives/resizable.directive';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { ContactsComponent } from './contacts/contacts.component';
     FriendsListComponent,
     ContactsComponent,
     UserResultComponent,
-    InvitationsComponent
+    InvitationsComponent,
+    ResizableDirective
   ],
   imports: [
     CdkTableModule,

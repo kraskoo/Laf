@@ -28,16 +28,6 @@ export class ContactsComponent implements OnDestroy {
   @ViewChild('container', { static: false }) container: ElementRef;
   selectedUser: User;
   currentMessage = '';
-  resizable: ResizableContainer = {
-    x: 0,
-    y: 0,
-    newX: 0,
-    newY: 0,
-    mouseInside: false,
-    canResize: false,
-    mouseDown: false
-  };
-
   constructor(
     private accountService: AccountService,
     private userService: UserService,
@@ -99,88 +89,5 @@ export class ContactsComponent implements OnDestroy {
       // tslint:disable-next-line: no-string-literal
       this.currentMessage = ev.target['value'] = '';
     }
-  }
-
-  mouseEnter() {
-    this.resizable.mouseInside = true;
-    document.body.style.cursor = 'e-resize';
-  }
-
-  mouseLeave() {
-    this.resizable.canResize = this.resizable.mouseInside = this.resizable.mouseDown = false;
-    document.body.style.cursor = 'default';
-  }
-
-  mouseMove(ev: MouseEvent) {
-    const body = document.body;
-    const bodyHalfWidth = body.offsetWidth / 2;
-    const elementWidth = Number(getStylePropertyValue(ev.target as HTMLElement, 'width').match(/\d+/g)[0]);
-    const elementMarginLeft = Number(getStylePropertyValue(ev.target as HTMLElement, 'margin-left').match(/\d+/g)[0]);
-    if (this.resizable.mouseDown) {
-      this.resizable.newX = ev.x;
-      if (ev.x < bodyHalfWidth) {
-        if (this.resizable.x > this.resizable.newX) {
-          if (elementMarginLeft <= 36) {
-            this.resizable.canResize = this.resizable.mouseInside = this.resizable.mouseDown = false;
-            return;
-          }
-
-          decreaseStylePropertyValue(ev.target as HTMLElement, 'margin-left', this.resizable.x - this.resizable.newX);
-          decreaseStylePropertyValue(ev.target as HTMLElement, 'margin-right', this.resizable.x - this.resizable.newX);
-        } else {
-          if (elementWidth <= 201) {
-            this.resizable.canResize = this.resizable.mouseInside = this.resizable.mouseDown = false;
-            return;
-          }
-
-          increaseStylePropertyValue(ev.target as HTMLElement, 'margin-left', this.resizable.newX - this.resizable.x);
-          increaseStylePropertyValue(ev.target as HTMLElement, 'margin-right', this.resizable.newX - this.resizable.x);
-        }
-      } else {
-        if (this.resizable.x > this.resizable.newX) {
-          if (elementWidth <= 201) {
-            this.resizable.canResize = this.resizable.mouseInside = this.resizable.mouseDown = false;
-            return;
-          }
-
-          increaseStylePropertyValue(ev.target as HTMLElement, 'margin-left', this.resizable.x - this.resizable.newX);
-          increaseStylePropertyValue(ev.target as HTMLElement, 'margin-right', this.resizable.x - this.resizable.newX);
-        } else {
-          if (elementMarginLeft <= 36) {
-            this.resizable.canResize = this.resizable.mouseInside = this.resizable.mouseDown = false;
-            return;
-          }
-
-          decreaseStylePropertyValue(ev.target as HTMLElement, 'margin-left', this.resizable.newX - this.resizable.x);
-          decreaseStylePropertyValue(ev.target as HTMLElement, 'margin-right', this.resizable.newX - this.resizable.x);
-        }
-      }
-
-      this.resizable.x = this.resizable.newX;
-      return;
-    }
-
-    this.resizable.canResize = (ev.clientX <= elementMarginLeft + 5) ||
-        (body.offsetWidth - ev.clientX - (elementMarginLeft + 5) - getScrollbarWidth() <= 5);
-    body.style.cursor = this.resizable.canResize ? 'e-resize' : 'default';
-  }
-
-  mousedown(ev: MouseEvent) {
-    ev.preventDefault();
-    if (!(this.resizable.mouseInside && this.resizable.canResize)) {
-      return;
-    }
-
-    this.resizable.x = ev.x;
-    this.resizable.mouseDown = true;
-  }
-
-  mouseup(ev: MouseEvent) {
-    ev.preventDefault();
-    this.resizable.canResize = this.resizable.mouseInside = this.resizable.mouseDown = false;
-  }
-
-  contextmenu(ev: MouseEvent) {
-    ev.preventDefault();
   }
 }

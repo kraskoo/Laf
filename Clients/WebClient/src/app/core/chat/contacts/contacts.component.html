@@ -3,12 +3,10 @@
     <div class="full-size"
           id="chat-container"
           [class.mat-elevation-z2]="true"
-          (mouseenter)="mouseEnter()"
-          (mouseleave)="mouseLeave()"
-          (mousemove)="mouseMove($event)"
-          (mousedown)="mousedown($event)"
-          (mouseup)="mouseup($event)"
-          (contextmenu)="contextmenu($event)">
+          resizable
+          [minResizableMargin]="35"
+          [minResizableWidth]="200"
+          #chatContainer>
       <div class="bottom-to-top" id="chat-content" #container></div>
     </div>
   </mat-grid-tile>
