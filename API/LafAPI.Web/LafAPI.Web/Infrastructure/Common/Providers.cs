@@ -1,7 +1,5 @@
 ﻿namespace LafAPI.Web.Infrastructure.Common
 {
-    using System.Threading.Tasks;
-
     public static class Providers
     {
         public static string PathToKeys(this string environment) =>
@@ -26,8 +24,8 @@
             var ips = new string[length];
             if (withDefaultIPs)
             {
-                ips[index++] = "http://localhost:4200";
-                ips[index++] = "https://localhost:4200";
+                ips[index++] = $"http://localhost:{port}";
+                ips[index++] = $"https://localhost:{port}";
                 ips[index++] = HttpGen(127, 0, 0, 1, port);
                 ips[index++] = HttpGen(127, 0, 0, 1, port, true);
                 ips[index++] = HttpGen(0, 0, 0, 0, port);
