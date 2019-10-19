@@ -10,14 +10,14 @@ function getStyleValueAndConvertedToNumber(element: HTMLElement, property: strin
 
 function increaseStylePropertyValue(element: HTMLElement, property: string, increaseWith: number) {
   const vcnv = getStyleValueAndConvertedToNumber(element, property);
-  vcnv.numberValue += increaseWith;
+  vcnv.numberValue += increaseWith - 1;
   vcnv.originalValue = vcnv.originalValue.replace(/\d+/g, vcnv.numberValue.toString());
   element.style[property] = vcnv.originalValue;
 }
 
 function decreaseStylePropertyValue(element: HTMLElement, property: string, decreaseWith: number) {
   const vcnv = getStyleValueAndConvertedToNumber(element, property);
-  vcnv.numberValue -= decreaseWith;
+  vcnv.numberValue -= decreaseWith + 1;
   vcnv.originalValue = vcnv.originalValue.replace(/\d+/g, vcnv.numberValue.toString());
   element.style[property] = vcnv.originalValue;
 }

@@ -60,9 +60,14 @@ export class ResizableDirective implements AfterViewInit {
     this.body.style.cursor = 'default';
   }
 
+  private resetValues() {
+    this.resizer.canResize = this.resizer.mouseInside = this.resizer.mouseDown = false;
+    this.resizer.x = this.resizer.newX = this.resizer.y = this.resizer.newY = 0;
+  }
+
   private didReachMinMargin(elementMarginLeft: number): boolean {
     if (elementMarginLeft <= this.minResizableMargin) {
-      this.resizer.canResize = this.resizer.mouseInside = this.resizer.mouseDown = false;
+      this.resetValues();
       return true;
     }
 
@@ -71,7 +76,7 @@ export class ResizableDirective implements AfterViewInit {
 
   private didReachMinWidth(elementWidth: number): boolean {
     if (elementWidth <= this.minResizableWidth) {
-      this.resizer.canResize = this.resizer.mouseInside = this.resizer.mouseDown = false;
+      this.resetValues();
       return true;
     }
 
@@ -148,7 +153,7 @@ export class ResizableDirective implements AfterViewInit {
   }
 
   mouseUp(ev: MouseEvent) {
-    this.resizer.canResize = this.resizer.mouseInside = this.resizer.mouseDown = false;
+    this.resetValues();
     ev.preventDefault();
   }
 
