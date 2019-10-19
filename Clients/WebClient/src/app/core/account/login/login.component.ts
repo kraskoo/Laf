@@ -5,6 +5,7 @@ import { RouterService } from '../../services/router.service';
 import { CookieService } from '../../services/cookie.service';
 import { AccountService } from '../../services/account.service';
 import { UserService } from '../../services/user.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -36,5 +37,9 @@ export class LoginComponent {
     } else {
       console.log('invalid');
     }
+  }
+
+  sendToServer() {
+    window.open(`${environment.url}/health`);
   }
 }
