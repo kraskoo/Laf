@@ -3,7 +3,8 @@
   height: 100%;
   position: relative;
   overflow-y: auto;
-  margin: auto 35px;
+  margin: 0 35px 5px 35px;
+  background-color: #eeeeee;
 }
 
 .bottom-to-top {
@@ -11,4 +12,12 @@
   bottom: 0;
   left: 0;
   max-height: 100%;
+}
+
+#bottom-part {
+  background-color: #eeeeee;
+}
+
+#message-line {
+  color: #424242;
 }

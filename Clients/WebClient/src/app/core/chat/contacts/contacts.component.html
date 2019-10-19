@@ -1,10 +1,18 @@
 <mat-grid-list cols="3" rowHeight="8%" [gutterSize]="2">
   <mat-grid-tile [colspan]="3" [rowspan]="10">
-    <div class="full-size" id="chat-container">
+    <div class="full-size"
+          id="chat-container"
+          [class.mat-elevation-z2]="true"
+          (mouseenter)="mouseEnter()"
+          (mouseleave)="mouseLeave()"
+          (mousemove)="mouseMove($event)"
+          (mousedown)="mousedown($event)"
+          (mouseup)="mouseup($event)"
+          (contextmenu)="contextmenu($event)">
       <div class="bottom-to-top" id="chat-content" #container></div>
     </div>
   </mat-grid-tile>
-  <mat-grid-tile [colspan]="3" [rowspan]="2">
+  <mat-grid-tile [colspan]="3" [rowspan]="2" id="bottom-part">
     <ng-template [ngIf]="!selectedUser">
       <p>Select user to chat with</p>
     </ng-template>
