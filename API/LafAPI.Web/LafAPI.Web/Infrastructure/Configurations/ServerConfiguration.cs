@@ -1,7 +1,6 @@
 ﻿namespace LafAPI.Web.Infrastructure.Configurations
 {
     using System;
-    using System.Linq;
 
     using LafAPI.Web.Hubs;
     using LafAPI.Web.Infrastructure.Common;
@@ -27,9 +26,7 @@
         public ServerConfiguration(IConfiguration configuration) : base(configuration)
             => this.origins = Providers.CreateDomainsByFourth32Bytes(
                        port: 4200,
-                       fourthBytes: new[] { 33, 101, 102, 103, 104, 105, 106, 107 })
-                   .Concat(new[] { "http://localhost:4200", "https://localhost:4200" })
-                   .ToArray();
+                       fourthBytes: new[] { 33, 101, 102, 103, 104, 105, 106, 107 });
 
         public override void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory) =>
             app.UseHsts()
