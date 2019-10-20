@@ -11,7 +11,7 @@ export class ChatService {
   startConnection() {
     const builder = new signalR.HubConnectionBuilder().withUrl(`${environment.url}/${this.chatUrl}`);
     this.hubConnection = builder.build();
-    this.hubConnection.start().then(() => console.log('Connection started!')).catch(console.error);
+    return this.hubConnection.start().then(() => console.log('Connection started!')).catch(console.error);
   }
 
   stopConnection(onReceiveCb) {

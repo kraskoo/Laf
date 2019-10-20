@@ -17,6 +17,7 @@ export class InvitationsComponent {
   private friends$: Observable<UserFriends> = this.accountService.friends(true);
   friends: UserFriends;
   selectedUser?: User;
+  isLoading = true;
   @ViewChild(NgForm, { static: false }) form: NgForm;
 
   constructor(
@@ -24,7 +25,10 @@ export class InvitationsComponent {
     private bottomSheet: MatBottomSheet,
     private accountService: AccountService) {
     this.routerService.getBackFrom(this);
-    this.friends$.subscribe(data => this.friends = data);
+    this.friends$.subscribe(data => {
+      this.isLoading = false;
+      this.friends = data;
+    });
   }
 
   openBottomSheet(text: string): void {

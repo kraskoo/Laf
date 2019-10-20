@@ -15,9 +15,10 @@
       <p>Select user to chat with</p>
     </ng-template>
     <ng-template [ngIf]="selectedUser">
-      <mat-form-field [style.width]="'80vw'" [style.padding]="'10px auto !important;'">
+      <mat-form-field [style.width]="'80vw'" [style.padding]="'10px auto !important;'" color="secondary">
         <input matInput placeholder="Message" autocomplete="off" (keydown)="proccessMessage($event)">
       </mat-form-field>
     </ng-template>
   </mat-grid-tile>
 </mat-grid-list>
+<spinner *ngIf="isLoading"></spinner>

@@ -11,7 +11,6 @@ export interface ResizableContainer {
   mouseInside: boolean;
   canResize: boolean;
   mouseDown: boolean;
-  buttons: number;
 }
 
 @Directive({
@@ -31,8 +30,7 @@ export class ResizableDirective implements AfterViewInit {
     newY: 0,
     mouseInside: false,
     canResize: false,
-    mouseDown: false,
-    buttons: 1
+    mouseDown: false
   };
   private body: HTMLElement;
   private element: HTMLElement;
@@ -47,7 +45,6 @@ export class ResizableDirective implements AfterViewInit {
     this.renderer.listen(this.element, 'mousemove', (ev) => this.mouseMove(ev));
     this.renderer.listen(this.element, 'mousedown', (ev) => this.mouseDown(ev));
     this.renderer.listen(this.element, 'mouseup', (ev) => this.mouseUp(ev));
-    this.renderer.listen(this.element, 'contextmenu', (ev) => this.contextMenu(ev));
   }
 
   mouseEnter() {
@@ -88,8 +85,8 @@ export class ResizableDirective implements AfterViewInit {
       return true;
     }
 
-    increaseStylePropertyValue(this.element, `${(this.resizer.buttons === 1 ? 'margin' : 'padding')}-left`, newSize);
-    increaseStylePropertyValue(this.element, `${(this.resizer.buttons === 1 ? 'margin' : 'padding')}-right`, newSize);
+    increaseStylePropertyValue(this.element, 'margin-left', newSize);
+    increaseStylePropertyValue(this.element, 'margin-right', newSize);
     return false;
   }
 
@@ -98,8 +95,8 @@ export class ResizableDirective implements AfterViewInit {
       return true;
     }
 
-    decreaseStylePropertyValue(this.element, `${(this.resizer.buttons === 1 ? 'margin' : 'padding')}-left`, newSize);
-    decreaseStylePropertyValue(this.element, `${(this.resizer.buttons === 1 ? 'margin' : 'padding')}-right`, newSize);
+    decreaseStylePropertyValue(this.element, 'margin-left', newSize);
+    decreaseStylePropertyValue(this.element, 'margin-right', newSize);
     return false;
   }
 
@@ -107,7 +104,7 @@ export class ResizableDirective implements AfterViewInit {
     const bodyHalfWidth = this.body.offsetWidth / 2;
     const elementWidth = Number(getStylePropertyValue(this.element, 'width').match(/\d+/g)[0]);
     const elementMarginLeft = Number(
-      getStylePropertyValue(this.element, `${(this.resizer.buttons === 1 ? 'margin' : 'padding')}-left`).match(/\d+/g)[0]);
+      getStylePropertyValue(this.element, 'margin-left').match(/\d+/g)[0]);
     if (this.resizer.mouseDown) {
       this.resizer.newX = ev.x;
       if (ev.x < bodyHalfWidth) {
@@ -142,22 +139,17 @@ export class ResizableDirective implements AfterViewInit {
   }
 
   mouseDown(ev: MouseEvent) {
-    if (!(this.resizer.mouseInside && this.resizer.canResize)) {
+    if ((!(this.resizer.mouseInside && this.resizer.canResize)) || ev.buttons !== 1) {
       return;
     }
 
     ev.preventDefault();
-    this.resizer.buttons = ev.buttons;
     this.resizer.x = ev.x;
     this.resizer.mouseDown = true;
   }
 
   mouseUp(ev: MouseEvent) {
     this.resetValues();
-    ev.preventDefault();
-  }
-
-  contextMenu(ev: MouseEvent) {
     ev.preventDefault();
   }
 }

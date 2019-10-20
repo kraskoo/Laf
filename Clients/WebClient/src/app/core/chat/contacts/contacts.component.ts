@@ -27,12 +27,13 @@ export interface ResizableContainer {
 export class ContactsComponent implements OnDestroy {
   @ViewChild('container', { static: false }) container: ElementRef;
   selectedUser: User;
+  isLoading = true;
   currentMessage = '';
   constructor(
     private accountService: AccountService,
     private userService: UserService,
     private chatService: ChatService) {
-      this.chatService.startConnection();
+      this.chatService.startConnection().then(() => { this.isLoading = false; }).catch(console.error);
       this.chatService.initRevieceMessage((id: string, message: string) => this.onReviece(id, message));
     }
 

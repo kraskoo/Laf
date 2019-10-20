@@ -25,6 +25,7 @@ import { FriendsListComponent } from './friends-list/friends-list.component';
 import { InvitationsComponent, UserResultComponent } from './invitations/invitations.component';
 import { ContactsComponent } from './contacts/contacts.component';
 import { ResizableDirective } from '../directives/resizable.directive';
+import { LoadingModule } from '../loading/loading.module';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { ResizableDirective } from '../directives/resizable.directive';
     MatInputModule,
     MatTableModule,
     MatTooltipModule,
-    ChatRoutingModule
+    ChatRoutingModule,
+    LoadingModule
   ],
   entryComponents: [
     UserResultComponent
