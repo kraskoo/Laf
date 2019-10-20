@@ -36,7 +36,7 @@
         [Route("[action]")]
         public async Task<IActionResult> Reject([FromBody]FriendBindingModel model)
         {
-            var userId = model.Id;
+            var userId = model.FriendId;
             var result = await this.ValidateFriend(userId);
             if (result != null)
             {
@@ -52,7 +52,7 @@
         [Route("[action]")]
         public async Task<IActionResult> DropFriendship([FromBody]FriendBindingModel model)
         {
-            var userId = model.Id;
+            var userId = model.FriendId;
             var id = this.User.GetId();
             var result = await this.ValidateFriend(userId);
             if (result != null)
@@ -68,7 +68,7 @@
         [Route("[action]")]
         public async Task<IActionResult> BlockUser([FromBody]FriendBindingModel model)
         {
-            var userId = model.Id;
+            var userId = model.FriendId;
             var id = this.User.GetId();
             var result = await this.ValidateFriend(userId);
             if (result != null)
@@ -84,7 +84,7 @@
         [Route("[action]")]
         public async Task<IActionResult> UnblockUser([FromBody]FriendBindingModel model)
         {
-            var userId = model.Id;
+            var userId = model.FriendId;
             var result = await this.ValidateFriend(userId);
             if (result != null)
             {
@@ -277,7 +277,7 @@
         public async Task<IActionResult> AddFriend([FromBody]FriendBindingModel model)
         {
             var id = this.User.GetId();
-            var friendId = model.Id;
+            var friendId = model.FriendId;
             var validationResult = await this.ValidateFriend(friendId);
             if (validationResult != null)
             {
@@ -300,7 +300,7 @@
         public async Task<IActionResult> ConfirmFriendship([FromBody]FriendBindingModel model)
         {
             var id = this.User.GetId();
-            var friendId = model.Id;
+            var friendId = model.FriendId;
             var validationResult = await this.ValidateFriend(friendId);
             if (validationResult != null)
             {

@@ -4,9 +4,8 @@ import { UserService } from '../../services/user.service';
 import { ChatService } from '../../services/chat.service';
 import { User } from '../../models/user.model';
 import { FriendsListComponent } from '../friends-list/friends-list.component';
-import { functions } from '../../utils/elements.util';
-
-const { getStylePropertyValue, increaseStylePropertyValue, decreaseStylePropertyValue, getScrollbarWidth } = functions;
+import { MessageService } from '../../services/message.service';
+import { MessagesByFriend } from '../../models/message.model';
 
 export interface ResizableContainer {
   x: number;
@@ -29,10 +28,12 @@ export class ContactsComponent implements OnDestroy {
   selectedUser: User;
   isLoading = true;
   currentMessage = '';
+
   constructor(
     private accountService: AccountService,
     private userService: UserService,
-    private chatService: ChatService) {
+    private chatService: ChatService,
+    private messageService: MessageService) {
       this.chatService.startConnection().then(() => { this.isLoading = false; }).catch(console.error);
       this.chatService.initRevieceMessage((id: string, message: string) => this.onReviece(id, message));
     }
@@ -49,6 +50,7 @@ export class ContactsComponent implements OnDestroy {
     if (this.userService.user.id === id) {
       p.classList.add('mine-msg');
       p.textContent = `[${dt}] ${this.userService.user.firstName} ${this.userService.user.lastName}: ${message}`;
+      this.messageService.create(this.selectedUser.id, currentDate, message).subscribe(() => { console.log('send it!'); });
     } else if (this.selectedUser.id === id) {
       p.classList.add('yours-msg');
       p.textContent = `[${dt}] ${this.selectedUser.firstName} ${this.selectedUser.lastName}: ${message}`;
@@ -59,7 +61,6 @@ export class ContactsComponent implements OnDestroy {
         this.accountService.getById(id).subscribe(data => {
           this.userService.add(data);
           p.textContent = `[${dt}] ${data.firstName} ${data.lastName}: ${message}`;
-          console.log(p);
         });
       } else {
         p.classList.add('yours-msg');
@@ -67,6 +68,15 @@ export class ContactsComponent implements OnDestroy {
       }
     }
 
+    this.scrollToBottom(p);
+  }
+
+  selectUser(friendsList: FriendsListComponent) {
+    this.selectedUser = friendsList.selectedUser;
+    this.updateMessages();
+  }
+
+  scrollToBottom(p: HTMLParagraphElement) {
     const container = this.container.nativeElement;
     const parent = container.parentElement;
     container.insertBefore(p, container.children[container.children.length]);
@@ -74,8 +84,39 @@ export class ContactsComponent implements OnDestroy {
     parent.scrollTop = container.scrollHeight - container.clientHeight + container.children[length].clientHeight;
   }
 
-  selectUser(friendsList: FriendsListComponent) {
-    this.selectedUser = friendsList.selectedUser;
+  appendRecentMessages(messages: MessagesByFriend[]) {
+    for (const msg of messages) {
+      const currentDate = new Date(msg.message.creationDate);
+      const dt = `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`;
+      const p = document.createElement('p');
+      p.classList.add('cht-msg');
+      p.classList.add(this.userService.user.id === msg.message.user.id ? 'mine-msg' : 'yours-msg');
+      p.textContent = `[${dt}] ${msg.message.user.firstName} ${msg.message.user.lastName}: ${msg.message.text}`;
+      this.scrollToBottom(p);
+    }
+  }
+
+  removeAllMessages() {
+    const chatMessages = document.getElementsByClassName('cht-msg');
+    for (const message of Array.from(chatMessages)) {
+      message.parentElement.removeChild(message);
+    }
+  }
+
+  updateMessages() {
+    if (!this.messageService.containsMessages(this.selectedUser.id)) {
+      this.messageService.messages(this.selectedUser.id).subscribe(m => {
+        this.messageService.addAll(m);
+        const messages = this.messageService.getAll(this.selectedUser.id);
+        this.removeAllMessages();
+        this.appendRecentMessages(messages);
+      });
+      return;
+    } else {
+      const messages = this.messageService.getAll(this.selectedUser.id);
+      this.removeAllMessages();
+      this.appendRecentMessages(messages);
+    }
   }
 
   sendMessage(text: string) {

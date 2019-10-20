@@ -30,10 +30,10 @@
             services.AddSingleton(this.Configuration);
 
             // Data repositories
+            services.AddSingleton<IMessageService, MessageService>();
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IUserFriendService, UserFriendService>();
 
             // Application services

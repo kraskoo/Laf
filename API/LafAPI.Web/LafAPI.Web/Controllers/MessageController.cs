@@ -2,15 +2,12 @@
 {
     using System.Threading.Tasks;
 
-    using LafAPI.Common.Mapping;
     using LafAPI.Web.Infrastructure.Extensions;
     using LafAPI.Web.Infrastructure.Interfaces;
     using LafAPI.Web.Models.Account;
     using LafAPI.Web.Models.Message;
 
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
 
     [Route("[controller]")]
     public class MessageController : BaseController
@@ -24,16 +21,14 @@
         [Route("[action]")]
         public async Task<IActionResult> Messages(FriendBindingModel model)
         {
-            var friendId = model.Id;
+            var friendId = model.FriendId;
             var result = await this.ValidateFriend(friendId);
             if (result != null)
             {
                 return result;
             }
 
-            return this.Ok(await this.messageService.GetAll(this.User.GetId(), friendId)
-                               .To<MessageViewModel>()
-                               .ToListAsync());
+            return this.Ok(await this.messageService.GetAll(this.User.GetId(), friendId));
         }
 
         [HttpPost]
@@ -41,13 +36,30 @@
         public async Task<IActionResult> Create(MessageBindingModel model)
         {
             var id = this.User.GetId();
-            var result = await this.ValidateFriend(model.Id);
-            if (result != null)
+            if (string.IsNullOrEmpty(id))
             {
-                return result;
+                return this.BadRequest("User doesn't exist!");
             }
 
-            await this.messageService.Create(id, model.Id, model.Text);
+            var result = await this.messageService.IsUserExist(id);
+            if (!result)
+            {
+                await this.messageService.AddUser(await this.UserServices.FindByIdAsync(id));
+            }
+
+            result = await this.messageService.IsUserExist(model.FriendId);
+            if (!result)
+            {
+                await this.messageService.AddUser(await this.UserServices.FindByIdAsync(model.FriendId));
+            }
+
+            var user = await this.messageService.GetUser(id);
+            var friend = await this.messageService.GetUser(model.FriendId);
+            await this.messageService.Create(
+                this.messageService.ToUserViewMode(user),
+                this.messageService.ToUserViewMode(friend),
+                model.CreationDate,
+                model.Text);
             return this.Ok();
         }
 
@@ -56,13 +68,17 @@
         public async Task<IActionResult> Edit(MessageBindingModel model)
         {
             var id = this.User.GetId();
-            var result = await this.ValidateFriend(model.Id);
+            var result = await this.ValidateFriend(model.FriendId);
             if (result != null)
             {
                 return result;
             }
 
-            await this.messageService.Edit(id, model.Id, model.CreationDate, model.Text);
+            await this.messageService.Edit(
+                id,
+                model.FriendId,
+                model.CreationDate,
+                model.Text);
             return this.Ok();
         }
 
@@ -71,13 +87,13 @@
         public async Task<IActionResult> Delete(MessageBindingModel model)
         {
             var id = this.User.GetId();
-            var result = await this.ValidateFriend(model.Id);
+            var result = await this.ValidateFriend(model.FriendId);
             if (result != null)
             {
                 return result;
             }
 
-            await this.messageService.Delete(id, model.Id, model.CreationDate);
+            await this.messageService.Delete(id, model.FriendId, model.CreationDate);
             return this.Ok();
         }
     }

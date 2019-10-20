@@ -2,6 +2,6 @@
 {
     public class FriendBindingModel
     {
-        public string Id { get; set; }
+        public string FriendId { get; set; }
     }
 }

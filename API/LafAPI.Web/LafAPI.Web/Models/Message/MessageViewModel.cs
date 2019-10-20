@@ -10,11 +10,10 @@
 
     public class MessageViewModel : IMapFrom<Message>, IHaveCustomMappings
     {
-        public string UserId { get; set; }
+        public int Id =>
+            $"{this.User.Id}-{this.Friend.Id}({this.CreationDate.Ticks}): {this.Text}".GetHashCode();
 
         public UserViewModel User { get; set; }
-
-        public string FriendId { get; set; }
 
         public UserViewModel Friend { get; set; }
 
@@ -26,5 +25,7 @@
             configuration.CreateMap<Message, MessageViewModel>()
                 .ForMember(m => m.User, opt => opt.MapFrom(x => x.User))
                 .ForMember(m => m.Friend, opt => opt.MapFrom(x => x.Friend));
+
+        public override int GetHashCode() => this.Id;
     }
 }

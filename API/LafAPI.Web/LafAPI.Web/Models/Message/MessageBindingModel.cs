@@ -4,7 +4,7 @@
 
     public class MessageBindingModel
     {
-        public string Id { get; set; }
+        public string FriendId { get; set; }
 
         public DateTime CreationDate { get; set; }
 

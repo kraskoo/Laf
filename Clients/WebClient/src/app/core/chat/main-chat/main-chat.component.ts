@@ -10,6 +10,7 @@ import { FriendsListComponent } from '../friends-list/friends-list.component';
 import { User } from '../../models/user.model';
 import { UserFriends } from '../../models/user-friends.model';
 import { config } from '../../services/configuration.service';
+import { MessageService } from '../../services/message.service';
 
 @Component({
   selector: 'app-main-chat',
@@ -27,7 +28,8 @@ export class MainChatComponent implements OnDestroy {
 
   constructor(
     private accountService: AccountService,
-    private sideNavService: SideNavService) {
+    private sideNavService: SideNavService,
+    private messageService: MessageService) {
     config.inChatPage = true;
     this.friends$.subscribe(data => this.friends = data);
   }
@@ -38,10 +40,6 @@ export class MainChatComponent implements OnDestroy {
 
   clickMenu() {
     this.sideNavService.clickMenu();
-  }
-
-  selectUser(fl: FriendsListComponent) {
-    this.selectedUser = fl.selectedUser;
   }
 
   get isInChatRoom(): boolean {
