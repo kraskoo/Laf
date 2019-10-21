@@ -21,3 +21,12 @@
 #message-line {
   color: #424242;
 }
+
+mat-grid-tile {
+  width: 24px;
+  height: 24px;
+}
+
+.mat-button-wrapper {
+  padding: 11px;
+}

@@ -1,12 +1,7 @@
 <mat-grid-list cols="3" rowHeight="8%" [gutterSize]="2">
   <mat-grid-tile [colspan]="3" [rowspan]="10">
-    <div class="full-size"
-          id="chat-container"
-          [class.mat-elevation-z2]="true"
-          resizable
-          [minResizableMargin]="35"
-          [minResizableWidth]="200"
-          #chatContainer>
+    <div class="full-size" id="chat-container" [class.mat-elevation-z2]="true" resizable [minResizableMargin]="35"
+      [minResizableWidth]="200" #chatContainer>
       <div class="bottom-to-top" id="chat-content" #container></div>
     </div>
   </mat-grid-tile>
@@ -16,7 +11,19 @@
     </ng-template>
     <ng-template [ngIf]="selectedUser">
       <mat-form-field [style.width]="'80vw'" [style.padding]="'10px auto !important;'" color="secondary">
-        <input matInput placeholder="Message" autocomplete="off" (keydown)="proccessMessage($event)">
+        <button mat-icon-button matPrefix [matMenuTriggerFor]="themeMenu" matTooltip="Emoji"
+          [matTooltipPosition]="'above'" aria-label="Button that displays a tooltip in various positions"
+          class="no-background">🙃</button>
+        <mat-menu #themeMenu="matMenu" yPosition='above'>
+          <mat-grid-list cols="5">
+            <ng-template *ngFor="let emojiKey of emojiKeys()" [ngIf]="true">
+              <mat-grid-tile role="menuitem" *ngFor="let e of emojiByKey(emojiKey)">
+                <button mat-stroked-button (click)='copyEmoji(e)'>{{e}}</button>
+              </mat-grid-tile>
+            </ng-template>
+          </mat-grid-list>
+        </mat-menu>
+        <input matInput placeholder="Message" autocomplete="off" (keydown)="proccessMessage($event)" id="message">
       </mat-form-field>
     </ng-template>
   </mat-grid-tile>

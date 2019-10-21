@@ -37,7 +37,7 @@ export class MessageService {
   getAll(friendId: string) {
     return messages.filter(
       m => (m.friendId === friendId && m.message.user.id === this.userService.user.id) ||
-          (m.message.user.id === friendId && m.friendId === this.userService.user.id));
+          (m.friendId === this.userService.user.id && m.message.user.id === friendId));
   }
 
   addAll(msgs: Message[]) {
