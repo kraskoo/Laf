@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { AccountService } from '../../services/account.service';
 import { UserService } from '../../services/user.service';
 import { RouterService } from '../../services/router.service';
-import { SideNavService } from '../../services/side-nav.service';
+import { ConfigService } from '../../services/config.service';
 
 import { AccountOwner } from '../../models/user.model';
 import { config } from '../../services/configuration.service';
@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private userService: UserService,
-    private sideNavService: SideNavService,
+    private sideNavService: ConfigService,
     private routerService: RouterService) { }
 
   ngOnInit(): void {

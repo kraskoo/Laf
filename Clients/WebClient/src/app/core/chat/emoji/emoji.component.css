@@ -1,0 +1,18 @@
+::ng-deep .inner-mat-menu-size {
+  width: 600px;
+}
+
+::ng-deep .inner-mat-menu-size-2 {
+  width: 680px;
+}
+
+::ng-deep .menu-item-height {
+  height: 30px;
+  line-height: 1px;
+  padding-left: 2px;
+  padding-right: 26px; 
+}
+
+.emoji-size {
+  font-size: 18px;
+}

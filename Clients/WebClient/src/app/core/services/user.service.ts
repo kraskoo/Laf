@@ -9,9 +9,7 @@ export class UserService {
   constructor(private cookieService: CookieService) { }
 
   add(user: User): void {
-    console.log(this.usersById);
     this.usersById[user.id] = user;
-    console.log(this.usersById);
   }
 
   remove(id: string) {

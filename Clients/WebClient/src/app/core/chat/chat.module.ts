@@ -28,6 +28,7 @@ import { InvitationsComponent, UserResultComponent } from './invitations/invitat
 import { ChatComponent } from './chat/chat.component';
 import { ResizableDirective } from '../directives/resizable.directive';
 import { LoadingModule } from '../loading/loading.module';
+import { EmojiComponent } from './emoji/emoji.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { LoadingModule } from '../loading/loading.module';
     UserResultComponent,
     InvitationsComponent,
     ResizableDirective,
-    ChatComponent
+    ChatComponent,
+    EmojiComponent
   ],
   imports: [
     CdkTableModule,

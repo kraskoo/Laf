@@ -3,14 +3,11 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 
 import { AccountService } from '../../services/account.service';
-import { SideNavService } from '../../services/side-nav.service';
-
-import { FriendsListComponent } from '../friends-list/friends-list.component';
+import { ConfigService } from '../../services/config.service';
 
 import { User } from '../../models/user.model';
 import { UserFriends } from '../../models/user-friends.model';
 import { config } from '../../services/configuration.service';
-import { MessageService } from '../../services/message.service';
 
 @Component({
   selector: 'app-main-chat',
@@ -20,16 +17,14 @@ import { MessageService } from '../../services/message.service';
 export class MainChatComponent implements OnDestroy {
   private friends$: Observable<UserFriends> = this.accountService.friends(true);
   friends: UserFriends;
-  selectedUser?: User;
   @ViewChild(MatSidenav, { static: false })
   set sideNav(value: MatSidenav) {
-    this.sideNavService.sideNav = value;
+    this.configService.sideNav = value;
   }
 
   constructor(
     private accountService: AccountService,
-    private sideNavService: SideNavService,
-    private messageService: MessageService) {
+    private configService: ConfigService) {
     config.inChatPage = true;
     this.friends$.subscribe(data => this.friends = data);
   }
@@ -39,7 +34,7 @@ export class MainChatComponent implements OnDestroy {
   }
 
   clickMenu() {
-    this.sideNavService.clickMenu();
+    this.configService.clickMenu();
   }
 
   get isInChatRoom(): boolean {
