@@ -1,0 +1,144 @@
+<mat-grid-list cols="3" rowHeight="8%" [gutterSize]="2">
+  <mat-grid-tile [colspan]="3" [rowspan]="10">
+    <div class="full-size" id="chat-container" [class.mat-elevation-z2]="true" resizable [minResizableMargin]="35"
+      [minResizableWidth]="200" #chatContainer>
+      <div class="bottom-to-top" id="chat-content" #container></div>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile [colspan]="3" [rowspan]="2" id="bottom-part">
+    <ng-template [ngIf]="!selectedUser">
+      <p>Select user to chat with</p>
+    </ng-template>
+    <ng-template [ngIf]="selectedUser">
+      <mat-form-field [style.width]="'80vw'" [style.padding]="'10px auto !important;'" color="secondary">
+        <button mat-icon-button matPrefix [matMenuTriggerFor]="emojiMenu" matTooltip="Emoji"
+          [matTooltipPosition]="'above'" aria-label="Button that displays a tooltip in various positions"
+          class="no-background">🙃</button>
+        <mat-menu #emojiMenu="matMenu" yPosition='above'>
+          <button mat-menu-item [matMenuTriggerFor]="Smileys" maxlength="10px">Smileys</button>
+          <button mat-menu-item [matMenuTriggerFor]="People_and_Fantasy">People and Fantasy</button>
+          <button mat-menu-item [matMenuTriggerFor]="Clothing_and_Accessories">Clothing and Accessories</button>
+          <button mat-menu-item [matMenuTriggerFor]="Pale_Emojis">Pale Emojis</button>
+          <button mat-menu-item [matMenuTriggerFor]="Moderate_Brown_Emojis">Moderate Brown Emojis</button>
+          <button mat-menu-item [matMenuTriggerFor]="Dark_Brown_Emojis">Dark Brown Emojis</button>
+          <button mat-menu-item [matMenuTriggerFor]="Black_Emojis">Black Emojis</button>
+          <button mat-menu-item [matMenuTriggerFor]="Animals___Nature">Animals & Nature</button>
+          <button mat-menu-item [matMenuTriggerFor]="Food___Drink">Food & Drink</button>
+          <button mat-menu-item [matMenuTriggerFor]="Activity___Sports">Activity & Sports</button>
+          <button mat-menu-item [matMenuTriggerFor]="Travel___Places">Travel & Places</button>
+          <button mat-menu-item [matMenuTriggerFor]="Objects">Objects</button>
+          <button mat-menu-item [matMenuTriggerFor]="Symbols">Symbols</button>
+          <button mat-menu-item [matMenuTriggerFor]="Flags">Flags</button>
+          <button mat-menu-item [matMenuTriggerFor]="New_Emojis">New Emojis</button>
+        </mat-menu>
+        <mat-menu #Smileys="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px" gutterSize="3px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('Smileys')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <mat-menu #People_and_Fantasy="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('People_and_Fantasy')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <mat-menu #Clothing_and_Accessories="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('Clothing_and_Accessories')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <mat-menu #Pale_Emojis="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('Pale_Emojis')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <mat-menu #Moderate_Brown_Emojis="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('Moderate_Brown_Emojis')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <mat-menu #Dark_Brown_Emojis="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('Dark_Brown_Emojis')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <mat-menu #Black_Emojis="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('Black_Emojis')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <mat-menu #Animals___Nature="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('Animals___Nature')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <mat-menu #Food___Drink="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('Food___Drink')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <mat-menu #Activity___Sports="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('Activity___Sports')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <mat-menu #Travel___Places="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('Travel___Places')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <mat-menu #Objects="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('Objects')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <mat-menu #Symbols="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('Symbols')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <mat-menu #Flags="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('Flags')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <mat-menu #New_Emojis="matMenu">
+          <mat-grid-list cols="6" rowHeight="24px">
+            <mat-grid-tile *ngFor="let e of emojiByKey('New_Emojis')">
+              <button mat-raised-button (click)="copyEmoji(e)">{{e}}</button>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </mat-menu>
+        <input matInput placeholder="Message" autocomplete="off" (keydown)="proccessMessage($event)" id="message">
+      </mat-form-field>
+    </ng-template>
+  </mat-grid-tile>
+</mat-grid-list>
+<spinner *ngIf="isLoading"></spinner>

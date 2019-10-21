@@ -1,31 +1,23 @@
 import { Component, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+
 import { AccountService } from '../../services/account.service';
 import { UserService } from '../../services/user.service';
 import { ChatService } from '../../services/chat.service';
-import { User } from '../../models/user.model';
+
 import { FriendsListComponent } from '../friends-list/friends-list.component';
+
+import { User } from '../../models/user.model';
 import { MessageService } from '../../services/message.service';
 import { MessagesByFriend } from '../../models/message.model';
 import { Emoji } from '../../models/emoji.model';
-import { EWOULDBLOCK } from 'constants';
-
-export interface ResizableContainer {
-  x: number;
-  y: number;
-  newX: number;
-  newY: number;
-  mouseInside: boolean;
-  canResize: boolean;
-  mouseDown: boolean;
-}
 
 @Component({
   // tslint:disable-next-line: component-selector
-  selector: 'contacts',
-  templateUrl: './contacts.component.html',
-  styleUrls: ['./contacts.component.css']
+  selector: 'chat',
+  templateUrl: './chat.component.html',
+  styleUrls: ['./chat.component.css']
 })
-export class ContactsComponent implements OnDestroy {
+export class ChatComponent implements OnDestroy {
   @ViewChild('container', { static: false }) container: ElementRef;
   selectedUser: User;
   isLoading = true;

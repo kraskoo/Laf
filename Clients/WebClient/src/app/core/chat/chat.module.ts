@@ -6,6 +6,7 @@ import {
   MatBottomSheetModule,
   MatFormFieldModule,
   MatSidenavModule,
+  MatTabsModule,
   MatToolbarModule,
   MatGridListModule,
   MatMenuModule,
@@ -24,7 +25,7 @@ import { MainChatComponent } from './main-chat/main-chat.component';
 import { ChatRoutingModule } from './chat-routing.module';
 import { FriendsListComponent } from './friends-list/friends-list.component';
 import { InvitationsComponent, UserResultComponent } from './invitations/invitations.component';
-import { ContactsComponent } from './contacts/contacts.component';
+import { ChatComponent } from './chat/chat.component';
 import { ResizableDirective } from '../directives/resizable.directive';
 import { LoadingModule } from '../loading/loading.module';
 
@@ -32,10 +33,10 @@ import { LoadingModule } from '../loading/loading.module';
   declarations: [
     MainChatComponent,
     FriendsListComponent,
-    ContactsComponent,
     UserResultComponent,
     InvitationsComponent,
-    ResizableDirective
+    ResizableDirective,
+    ChatComponent
   ],
   imports: [
     CdkTableModule,
@@ -45,6 +46,7 @@ import { LoadingModule } from '../loading/loading.module';
     MatBottomSheetModule,
     MatFormFieldModule,
     MatSidenavModule,
+    MatTabsModule,
     MatToolbarModule,
     MatGridListModule,
     MatMenuModule,
