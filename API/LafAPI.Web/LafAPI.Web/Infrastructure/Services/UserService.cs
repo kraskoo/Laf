@@ -33,7 +33,8 @@
         public async Task<IdentityResult> UploadAvatarImagePath(string userId, string path)
         {
             var user = await this.userManager.FindByIdAsync(userId);
-            user.AvatarPath = path;
+            user.AvatarPath = path.Replace("/wwwroot", string.Empty)
+                .Replace("\\wwwroot", string.Empty);
             return await this.userManager.UpdateAsync(user);
         }
 

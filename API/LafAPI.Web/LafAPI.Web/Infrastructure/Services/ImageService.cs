@@ -15,7 +15,7 @@
     {
         private const int Size = 150;
         private const int Quality = 72;
-        private const string Public = "public";
+        private const string Public = "wwwroot";
 
         private readonly IWebHostEnvironment environment;
 

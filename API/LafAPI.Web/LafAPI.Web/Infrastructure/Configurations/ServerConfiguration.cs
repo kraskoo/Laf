@@ -31,6 +31,8 @@
         public override void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory) =>
             app.UseHsts()
                 .UseHttpsRedirection()
+                .UseDefaultFiles()
+                .UseStaticFiles()
                 .UseRouting()
                 .UseCors(CorsPolicy)
                 .UseCookiePolicy()
