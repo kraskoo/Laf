@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { UserService } from './user.service';
 import { Message, MessagesByFriend } from '../models/message.model';
+import { map } from 'rxjs/operators';
 
 const messages: MessagesByFriend[] = [];
 

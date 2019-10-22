@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 
 import { ConfigService } from '../../services/config.service';
-import { MessageService } from '../../services/message.service';
 
 import { User } from '../../models/user.model';
 
@@ -15,9 +14,7 @@ export class FriendsListComponent {
   @Input() title: string;
   @Input() list: User[];
 
-  constructor(
-    private configService: ConfigService,
-    private messageService: MessageService) { }
+  constructor(private configService: ConfigService) { }
 
   clickMenu() {
     this.configService.clickMenu();
@@ -25,10 +22,5 @@ export class FriendsListComponent {
 
   selectUser(user: User) {
     this.configService.selectedUser = user;
-    if (!this.messageService.containsMessages(this.configService.selectedUser.id)) {
-      this.messageService.messages(this.configService.selectedUser.id).subscribe(messages => {
-        this.messageService.addAll(messages);
-      });
-    }
   }
 }
