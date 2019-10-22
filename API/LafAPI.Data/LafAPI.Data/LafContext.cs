@@ -25,8 +25,6 @@
 
         public DbSet<UserFriend> UserFriends { get; set; }
 
-        public DbSet<Message> Messages { get; set; }
-
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -97,8 +95,6 @@
                 .HasForeignKey(e => e.UserId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Entity<Message>().HasKey(m => new { m.UserId, m.FriendId, m.CreationDate });
 
             builder.Entity<UserFriend>().HasKey(uf => new { uf.UserId, uf.FriendId });
 
