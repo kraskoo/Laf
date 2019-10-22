@@ -2,7 +2,6 @@
 {
     using System;
 
-    using Microsoft.EntityFrameworkCore.Metadata;
     using Microsoft.EntityFrameworkCore.Migrations;
 
     public partial class Initial : Migration
@@ -56,6 +55,7 @@
                                  AccessFailedCount = table.Column<int>(),
                                  FirstName = table.Column<string>(maxLength: 35),
                                  LastName = table.Column<string>(maxLength: 35),
+                                 AvatarPath = table.Column<string>(nullable: true),
                                  CreatedOn = table.Column<DateTime>(),
                                  ModifiedOn = table.Column<DateTime>(nullable: true),
                                  IsDeleted = table.Column<bool>(),
@@ -66,9 +66,7 @@
                 "AspNetRoleClaims",
                 table => new
                              {
-                                 Id = table.Column<int>().Annotation(
-                                     "SqlServer:ValueGenerationStrategy",
-                                     SqlServerValueGenerationStrategy.IdentityColumn),
+                                 Id = table.Column<int>().Annotation("SqlServer:Identity", "1, 1"),
                                  RoleId = table.Column<string>(),
                                  ClaimType = table.Column<string>(nullable: true),
                                  ClaimValue = table.Column<string>(nullable: true)
@@ -87,9 +85,7 @@
                 "AspNetUserClaims",
                 table => new
                              {
-                                 Id = table.Column<int>().Annotation(
-                                     "SqlServer:ValueGenerationStrategy",
-                                     SqlServerValueGenerationStrategy.IdentityColumn),
+                                 Id = table.Column<int>().Annotation("SqlServer:Identity", "1, 1"),
                                  UserId = table.Column<string>(),
                                  ClaimType = table.Column<string>(nullable: true),
                                  ClaimValue = table.Column<string>(nullable: true)
@@ -163,7 +159,12 @@
                     });
             migrationBuilder.CreateTable(
                 "UserFriends",
-                table => new { UserId = table.Column<string>(), FriendId = table.Column<string>() },
+                table => new
+                             {
+                                 UserId = table.Column<string>(),
+                                 FriendId = table.Column<string>(),
+                                 Status = table.Column<int>()
+                             },
                 constraints: table =>
                     {
                         table.PrimaryKey("PK_UserFriends", x => new { x.UserId, x.FriendId });

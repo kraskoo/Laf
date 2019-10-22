@@ -1,6 +1,7 @@
 ﻿namespace LafAPI.Web.Controllers
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -14,18 +15,39 @@
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Cors;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("[controller]")]
     public class AccountController : BaseController
     {
         private readonly IUserFriendService userFriendService;
+        private readonly IImageService imageService;
 
         public AccountController(
             IUserService userService,
-            IUserFriendService userFriendService) : base(userService)
-            => this.userFriendService = userFriendService;
+            IUserFriendService userFriendService,
+            IImageService imageService) : base(userService)
+        {
+            this.userFriendService = userFriendService;
+            this.imageService = imageService;
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Upload(IFormFile file)
+        {
+            var memStream = new MemoryStream();
+            await file.CopyToAsync(memStream);
+            var path = this.imageService.ConvertImage(memStream);
+            var result = await this.UserServices.UploadAvatarImagePath(this.User.GetId(), path);
+            if (!result.Succeeded)
+            {
+                return this.BadRequest(result.Errors);
+            }
+
+            return this.Ok();
+        }
 
         [HttpGet]
         [Route("[action]")]

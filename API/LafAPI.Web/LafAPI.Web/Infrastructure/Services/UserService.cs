@@ -30,6 +30,13 @@
         public UserService(UserManager<User> userManager) =>
             this.userManager = userManager;
 
+        public async Task<IdentityResult> UploadAvatarImagePath(string userId, string path)
+        {
+            var user = await this.userManager.FindByIdAsync(userId);
+            user.AvatarPath = path;
+            return await this.userManager.UpdateAsync(user);
+        }
+
         public async Task<LoginResponse> Authenticate(
             string email,
             string password,

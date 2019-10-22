@@ -35,6 +35,7 @@
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserFriendService, UserFriendService>();
+            services.AddScoped<IImageService, ImageService>();
 
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();

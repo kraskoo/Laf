@@ -30,6 +30,8 @@
         [MaxLength(GlobalConstants.MaxNameLength)]
         public string LastName { get; set; }
 
+        public string AvatarPath { get; set; }
+
         // Audit info
         public DateTime CreatedOn { get; set; }
 

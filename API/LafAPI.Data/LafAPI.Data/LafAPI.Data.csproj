@@ -5,11 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20190922222453_ChangeUserFriendToDeletableModel.cs" />
-    <Compile Remove="Migrations\20190922222453_ChangeUserFriendToDeletableModel.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="appsettings.json" />
   </ItemGroup>
 
