@@ -4,6 +4,7 @@ import { User } from '../models/user.model';
 
 let sideNavigation: MatSidenav = null;
 let selectedUser: User = null;
+let inChatPage = false;
 
 @Injectable({ providedIn: 'root' })
 export class ConfigService {
@@ -13,6 +14,14 @@ export class ConfigService {
 
   set sideNav(value: MatSidenav) {
     sideNavigation = value;
+  }
+
+  get inChatRoom() {
+    return inChatPage;
+  }
+
+  set inChatRoom(value: boolean) {
+    inChatPage = value;
   }
 
   get selectedUser() {

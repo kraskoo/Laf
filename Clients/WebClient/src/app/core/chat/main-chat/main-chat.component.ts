@@ -5,9 +5,7 @@ import { Observable } from 'rxjs';
 import { AccountService } from '../../services/account.service';
 import { ConfigService } from '../../services/config.service';
 
-import { User } from '../../models/user.model';
 import { UserFriends } from '../../models/user-friends.model';
-import { config } from '../../services/configuration.service';
 
 @Component({
   selector: 'app-main-chat',
@@ -25,12 +23,12 @@ export class MainChatComponent implements OnDestroy {
   constructor(
     private accountService: AccountService,
     private configService: ConfigService) {
-    config.inChatPage = true;
+    this.configService.inChatRoom = true;
     this.friends$.subscribe(data => this.friends = data);
   }
 
   ngOnDestroy(): void {
-    config.inChatPage = false;
+    this.configService.inChatRoom = false;
   }
 
   clickMenu() {
@@ -38,6 +36,6 @@ export class MainChatComponent implements OnDestroy {
   }
 
   get isInChatRoom(): boolean {
-    return config.inChatPage;
+    return this.configService.inChatRoom;
   }
 }

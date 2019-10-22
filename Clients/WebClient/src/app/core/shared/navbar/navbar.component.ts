@@ -7,7 +7,6 @@ import { RouterService } from '../../services/router.service';
 import { ConfigService } from '../../services/config.service';
 
 import { AccountOwner } from '../../models/user.model';
-import { config } from '../../services/configuration.service';
 
 @Component({
   selector: 'app-navbar',
@@ -19,7 +18,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private userService: UserService,
-    private sideNavService: ConfigService,
+    private configService: ConfigService,
     private routerService: RouterService) { }
 
   ngOnInit(): void {
@@ -27,11 +26,11 @@ export class NavbarComponent implements OnInit {
   }
 
   clickMenu() {
-    this.sideNavService.clickMenu();
+    this.configService.clickMenu();
   }
 
   get isInChatRoom(): boolean {
-    return config.inChatPage;
+    return this.configService.inChatRoom;
   }
 
   get hasLoggedinUser(): boolean {
