@@ -55,15 +55,15 @@ export class AccountService {
     return this.http.get<User>(url);
   }
 
-  addFriend(id: string) {
+  addFriend(friendId: string) {
     const url = 'account/addfriend';
-    const body = { id };
+    const body = { friendId };
     return this.http.post(url, body);
   }
 
-  acceptFriendship(id: string) {
+  acceptFriendship(friendId: string) {
     const url = 'account/confirmfriendship';
-    const body = { id };
+    const body = { friendId };
     return this.http.post(url, body);
   }
 
@@ -72,27 +72,33 @@ export class AccountService {
     return this.http.get<number>(url);
   }
 
-  reject(id: string) {
+  reject(friendId: string) {
     const url = 'account/reject';
-    const body = { id };
+    const body = { friendId };
     return this.http.post(url, body);
   }
 
-  dropUser(id: string) {
+  dropUser(friendId: string) {
     const url = 'account/dropfriendship';
-    const body = { id };
+    const body = { friendId };
     return this.http.post(url, body);
   }
 
-  blockUser(id: string) {
+  blockUser(friendId: string) {
     const url = 'account/blockuser';
-    const body = { id };
+    const body = { friendId };
     return this.http.post(url, body);
   }
 
-  unblockUser(id: string) {
+  unblockUser(friendId: string) {
     const url = 'account/unblockuser';
-    const body = { id };
+    const body = { friendId };
+    return this.http.post(url, body);
+  }
+
+  uploadImage(file) {
+    const url = 'account/upload';
+    const body = { file };
     return this.http.post(url, body);
   }
 }

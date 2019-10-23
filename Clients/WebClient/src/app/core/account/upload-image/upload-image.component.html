@@ -1,0 +1,13 @@
+<div class="sides-25">
+  <h1 class="centred-text">Login Form</h1>
+  <form (ngSubmit)="onSubmit()" #f="ngForm" enctype="multipart/form-data">
+    <label for="singleFile">Upload file</label>
+    <input id="singleFile" type="file" name="file" #file="ngModel" ngModel required />
+    <button type="submit"
+            mat-raised-button color="primary"
+            [disabled]="f.invalid">Upload image</button>
+  </form>
+  <br />
+  <p>Becouse this is development version and the SSL certificate probably is not valid, but you may want to test it through network. You have to authorise using of unsecure connection, go to: <button mat-raised-button (click)="sendToServer()">server check</button> and give your permission once for unsecured connection. Otherwise you cannot using login form and the other components in client</p>
+</div>
+<spinner *ngIf="isLoading"></spinner>
