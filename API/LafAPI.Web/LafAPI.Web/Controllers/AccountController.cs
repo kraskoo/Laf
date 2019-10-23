@@ -1,7 +1,6 @@
 ﻿namespace LafAPI.Web.Controllers
 {
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -15,7 +14,6 @@
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("[controller]")]
@@ -34,13 +32,15 @@
         }
 
         [HttpPost]
+        [DisableRequestSizeLimit]
         [Route("[action]")]
-        public async Task<IActionResult> Upload(IFormFile file)
+        public async Task<IActionResult> Upload([FromForm]UploadImageViewModel model)
         {
-            var memStream = new MemoryStream();
-            await file.CopyToAsync(memStream);
-            var path = this.imageService.ConvertImage(memStream);
-            var result = await this.UserServices.UploadAvatarImagePath(this.User.GetId(), path);
+            var file = model.File;
+            using var stream = file.OpenReadStream();
+            var path = this.imageService.ConvertImage(stream);
+            var user = await this.UserServices.FindByIdAsync(this.User.GetId());
+            var result = await this.UserServices.UploadAvatarImagePath(user, path);
             if (!result.Succeeded)
             {
                 return this.BadRequest(result.Errors);

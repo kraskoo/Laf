@@ -23,6 +23,8 @@
 
         public string FriendEmail { get; set; }
 
+        public string FriendAvatarPath { get; set; }
+
         public FriendshipStatusType Status { get; set; }
 
         public override int GetHashCode() =>
@@ -38,6 +40,7 @@
                 .ForMember(m => m.FriendId, opt => opt.MapFrom(x => x.Friend.Id))
                 .ForMember(m => m.FriendEmail, opt => opt.MapFrom(x => x.Friend.Email))
                 .ForMember(m => m.FriendFirstName, opt => opt.MapFrom(x => x.Friend.FirstName))
-                .ForMember(m => m.FriendLastName, opt => opt.MapFrom(x => x.Friend.LastName));
+                .ForMember(m => m.FriendLastName, opt => opt.MapFrom(x => x.Friend.LastName))
+                .ForMember(m => m.FriendAvatarPath, opt => opt.MapFrom(x => x.Friend.AvatarPath));
     }
 }

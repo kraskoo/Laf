@@ -259,6 +259,7 @@
                     Email = model.FriendEmail,
                     FirstName = model.FriendFirstName,
                     LastName = model.FriendLastName,
+                    AvatarPath = model.FriendAvatarPath,
                     Status = model.Status
                 };
     }

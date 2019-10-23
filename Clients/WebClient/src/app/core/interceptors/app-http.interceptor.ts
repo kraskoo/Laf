@@ -2,8 +2,10 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse, HttpHeade
 import { Injectable } from '@angular/core';
 import { throwError, EMPTY } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+
 import { UserService } from '../services/user.service';
 import { RouterService } from '../services/router.service';
+
 import { environment } from '../../../environments/environment';
 
 const { url } = environment;
@@ -40,7 +42,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
     }
 
     if (hasLoggedinUser) {
-      httpHeaders = req.headers.set('Authorization', `Bearer ${this.userService.user.token}`);
+      httpHeaders = httpHeaders.set('Authorization', `Bearer ${this.userService.user.token}`);
     }
 
     return next.handle(

@@ -4,6 +4,7 @@ export interface AccountOwner {
   firstName: string;
   lastName: string;
   email: string;
+  avatarPath: string;
   roles: string[];
   expiresIn: number;
   expires: Date;
@@ -14,6 +15,7 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  avatarPath: string;
   roles: string[];
 }
 

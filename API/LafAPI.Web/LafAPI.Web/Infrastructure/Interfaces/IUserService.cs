@@ -15,7 +15,7 @@
 
     public interface IUserService
     {
-        Task<IdentityResult> UploadAvatarImagePath(string userId, string path);
+        Task<IdentityResult> UploadAvatarImagePath(User user, string path);
 
         Task<LoginResponse> Authenticate(
             string email,

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Threading;
@@ -13,6 +14,7 @@
     using LafAPI.Web.Infrastructure.Middlewares.Auth;
     using LafAPI.Web.Infrastructure.Models;
 
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -26,15 +28,30 @@
         public const string InvalidEmail = "User with this userName doesn't exist!";
         public const string InvalidPassword = "Invalid Password!";
         private readonly UserManager<User> userManager;
+        private readonly IWebHostEnvironment environment;
 
-        public UserService(UserManager<User> userManager) =>
-            this.userManager = userManager;
-
-        public async Task<IdentityResult> UploadAvatarImagePath(string userId, string path)
+        public UserService(IWebHostEnvironment environment, UserManager<User> userManager)
         {
-            var user = await this.userManager.FindByIdAsync(userId);
-            user.AvatarPath = path.Replace("/wwwroot", string.Empty)
-                .Replace("\\wwwroot", string.Empty);
+            this.environment = environment;
+            this.userManager = userManager;
+        }
+
+        public async Task<IdentityResult> UploadAvatarImagePath(User user, string path)
+        {
+            if (!user.AvatarPath.EndsWith("profile-picture.png"))
+            {
+                var pathToOldFile = Path.Combine(this.environment.ContentRootPath, "wwwroot");
+                var avatarPath = user.AvatarPath.Substring(1).Replace("/", $"{Path.DirectorySeparatorChar}");
+                pathToOldFile = Path.Combine(pathToOldFile, avatarPath);
+                if (File.Exists(pathToOldFile))
+                {
+                    File.Delete(pathToOldFile);
+                }
+            }
+
+            user.AvatarPath = path.Replace(this.environment.ContentRootPath, string.Empty)
+                .Replace("\\", "/")
+                .Replace("/wwwroot", string.Empty);
             return await this.userManager.UpdateAsync(user);
         }
 

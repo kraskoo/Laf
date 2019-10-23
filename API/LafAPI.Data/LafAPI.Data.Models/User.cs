@@ -18,6 +18,7 @@
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
             this.UserFriends = new HashSet<UserFriend>();
+            this.AvatarPath = "/profile-picture.png";
         }
 
         [Required]

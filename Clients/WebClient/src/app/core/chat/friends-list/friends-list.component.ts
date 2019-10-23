@@ -22,5 +22,6 @@ export class FriendsListComponent {
 
   selectUser(user: User) {
     this.configService.selectedUser = user;
+    console.log(user);
   }
 }

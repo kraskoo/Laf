@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup, FormBuilder } from '@angular/forms';
 
 import { RouterService } from '../../services/router.service';
 import { AccountService } from '../../services/account.service';
@@ -14,17 +14,31 @@ import { environment } from '../../../../environments/environment';
 export class UploadImageComponent {
   @ViewChild('f', { static: false }) form: NgForm;
   isLoading = false;
+  fb: FormBuilder;
+  formGroup: FormGroup;
+  formData: FormData;
 
   constructor(
     private routerService: RouterService,
-    private accountService: AccountService) { }
+    private accountService: AccountService) {
+    this.fb = new FormBuilder();
+    this.formGroup = this.fb.group({
+      image: ['']
+    });
+  }
+
+  onChange(event) {
+    if (event.target.files.length > 0) {
+      this.formGroup.get('image').setValue(event.target.files[0]);
+    }
+  }
 
   onSubmit(): void {
     if (this.form.valid) {
       this.isLoading = true;
-      const file = this.form.value.file;
-      console.log(file);
-      this.accountService.uploadImage(file).subscribe(() => {
+      this.formData = new FormData();
+      this.formData.append('file', this.formGroup.get('image').value);
+      this.accountService.uploadImage(this.formData).subscribe(() => {
         this.routerService.navigate(['/']);
         this.isLoading = false;
       });

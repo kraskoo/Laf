@@ -12,6 +12,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Http.Features;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@
 
     public class ServerConfiguration : BaseConfiguration
     {
+        private const int TwoHundredMegabytes = 200 * 1024 * 1024;
         private const string CorsPolicy = nameof(CorsPolicy);
         private readonly string[] origins;
 
@@ -31,6 +33,7 @@
         public override void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory) =>
             app.UseHsts()
                 .UseHttpsRedirection()
+                .UseFileServer()
                 .UseDefaultFiles()
                 .UseStaticFiles()
                 .UseRouting()
@@ -46,7 +49,7 @@
                         endpoints.MapHealthChecks("/health");
                         endpoints.MapDefaultControllerRoute()
                             .RequireAuthorization(JwtBearerDefaults.AuthenticationScheme);
-                            // .RequireCors(CorsPolicy)
+                        // .RequireCors(CorsPolicy);
                     });
 
         public override void ConfigureServices(IServiceCollection services)
@@ -61,6 +64,10 @@
                     {
                         options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
                         options.HttpsPort = int.Parse(this.Configuration["Kestrel:Ports:https"]);
+                    })
+                .Configure<FormOptions>(options =>
+                    {
+                        options.MultipartBodyLengthLimit = TwoHundredMegabytes;
                     })
                 .AddRouting()
                 .AddCors(options =>

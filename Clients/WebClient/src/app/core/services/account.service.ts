@@ -9,23 +9,32 @@ export class AccountService {
   constructor(private http: HttpClient) { }
 
   login(email: string, password: string) {
-    return this.http.post<AccountOwner>('account/login', { email, password });
+    return this.http.post<AccountOwner>('account/login',
+      {
+        email,
+        password
+      }, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
   }
 
   register(firstName: string, lastName: string, email: string, password: string, passwordConfirmation: string) {
     return this.http.post<AccountOwner>(
       'account/register', {
-        firstName,
-        lastName,
-        email,
-        password,
-        passwordConfirmation
-      }, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
+      firstName,
+      lastName,
+      email,
+      password,
+      passwordConfirmation
+    }, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
   }
 
   friends(friends: boolean = false, search: string = null): Observable<UserFriends> {
@@ -47,7 +56,12 @@ export class AccountService {
       url = `${url}?search=${search}`;
     }
 
-    return this.http.get<UserFriends[]>(url);
+    return this.http.get<UserFriends[]>(url, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
   }
 
   getById(id: string): Observable<User> {
@@ -96,9 +110,8 @@ export class AccountService {
     return this.http.post(url, body);
   }
 
-  uploadImage(file) {
+  uploadImage(form) {
     const url = 'account/upload';
-    const body = { file };
-    return this.http.post(url, body);
+    return this.http.post(url, form);
   }
 }

@@ -15,7 +15,6 @@
     {
         private const int Size = 150;
         private const int Quality = 72;
-        private const string Public = "wwwroot";
 
         private readonly IWebHostEnvironment environment;
 
@@ -26,15 +25,15 @@
 
         public string ConvertImage(Stream stream)
         {
-            var rootPath = this.environment.WebRootPath;
+            var rootPath = Path.Combine(this.environment.ContentRootPath, "wwwroot");
             var currentDate = DateTime.UtcNow;
-            var filePath = Path.Combine(rootPath, Public, $"{currentDate.Year}{currentDate.Month}{currentDate.Day}");
+            var filePath = Path.Combine(rootPath, $"{currentDate.Year}{currentDate.Month}{currentDate.Day}");
             if (!Directory.Exists(filePath))
             {
                 Directory.CreateDirectory(filePath);
             }
 
-            var fileName = $"{Guid.NewGuid().ToString()}.png";
+            var fileName = $"{Guid.NewGuid().ToString().Replace("-", string.Empty)}.png";
             int width = Size;
             int height = Size;
             using var image = new Bitmap(stream, true);
