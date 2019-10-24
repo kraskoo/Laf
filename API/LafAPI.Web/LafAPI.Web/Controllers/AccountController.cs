@@ -149,6 +149,7 @@
             response.FirstName = user.FirstName;
             response.LastName = user.LastName;
             response.Email = user.Email;
+            response.AvatarPath = user.AvatarPath;
             return this.Ok(response);
         }
 
@@ -210,6 +211,7 @@
             response.FirstName = user.FirstName;
             response.LastName = user.LastName;
             response.Email = user.Email;
+            response.AvatarPath = user.AvatarPath;
             return this.Ok(response);
         }
 

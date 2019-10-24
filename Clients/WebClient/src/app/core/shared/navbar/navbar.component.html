@@ -21,7 +21,7 @@
     </ng-template>
     <ng-template [ngIf]="hasLoggedinUser">
       <button mat-button [matMenuTriggerFor]="userMenu" matTooltip="{{user.firstName}} {{user.lastName}}">
-        <mat-icon aria-hidden="false" aria-label="Account icon">account_circle</mat-icon>
+        <img src="{{avatar}}" class="avatar" />
       </button>
       <mat-menu #userMenu="matMenu">
         <a mat-menu-item routerLink="/account/upload-image">Upload image</a>

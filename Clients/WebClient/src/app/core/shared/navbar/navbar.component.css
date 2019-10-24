@@ -3,3 +3,9 @@
   width: 36px;
   height: 36px;
 }
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}

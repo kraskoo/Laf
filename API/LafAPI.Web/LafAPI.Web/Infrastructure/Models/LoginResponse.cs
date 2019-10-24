@@ -21,6 +21,9 @@
         [JsonProperty("email")]
         public string Email { get; set; }
 
+        [JsonProperty("avatarPath")]
+        public string AvatarPath { get; set; }
+
         [JsonProperty("roles")]
         public IEnumerable<string> Roles { get; set; }
 

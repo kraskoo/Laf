@@ -9,8 +9,9 @@
 </mat-toolbar>
 <h5 [style.textAlign]="'center'">-- Select a friend to chat --</h5>
 <mat-nav-list *ngFor="let friend of list">
-  <button mat-stroked-button class="full-width" id="flmfb" (click)="selectUser(friend)" [style.width]="'100%'">
-    <span>{{friend.firstName}} {{friend.lastName}}</span>&nbsp;
+  <button mat-stroked-button class="full-width" id="flmfb" (click)="selectUser(friend)" [style.width]="'100%'" [style.textAlign]="'center'" >
+    <img src="{{avatarPath(friend)}}" class="avatar" />&nbsp;
     <span class="spacer"></span>
+    <span>{{friend.firstName}} {{friend.lastName}}</span>
   </button>
 </mat-nav-list>

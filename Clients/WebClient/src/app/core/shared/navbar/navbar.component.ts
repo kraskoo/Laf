@@ -8,6 +8,8 @@ import { ConfigService } from '../../services/config.service';
 
 import { AccountOwner } from '../../models/user.model';
 
+import { environment } from '../../../../environments/environment';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -43,6 +45,10 @@ export class NavbarComponent implements OnInit {
 
   get user(): AccountOwner {
     return this.userService.user;
+  }
+
+  get avatar(): string {
+    return `${environment.url}${this.user.avatarPath}`;
   }
 
   logout(): void {

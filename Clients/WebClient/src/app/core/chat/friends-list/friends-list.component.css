@@ -8,3 +8,9 @@ button[mat-flat-button] {
   padding: 0 8px;
   width: 100%;
 }
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}

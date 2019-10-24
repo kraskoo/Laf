@@ -4,6 +4,8 @@ import { ConfigService } from '../../services/config.service';
 
 import { User } from '../../models/user.model';
 
+import { environment } from '../../../../environments/environment';
+
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'chat-friends-list',
@@ -22,6 +24,9 @@ export class FriendsListComponent {
 
   selectUser(user: User) {
     this.configService.selectedUser = user;
-    console.log(user);
+  }
+
+  avatarPath(user: User): string {
+    return `${environment.url}${user.avatarPath}`;
   }
 }
