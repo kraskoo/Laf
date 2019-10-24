@@ -1,0 +1,22 @@
+div.fileinputs {
+  position: relative;
+}
+
+div.fakefile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+input.file {
+  position: relative;
+  text-align: right;
+  opacity: 0;
+  z-index: 2;
+}
+
+.search-image {
+  width: 36px;
+  height: 36px;
+}

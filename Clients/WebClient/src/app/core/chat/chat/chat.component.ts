@@ -90,6 +90,10 @@ export class ChatComponent implements OnDestroy {
   }
 
   updateMessages() {
+    if (!this.configService.selectedUser) {
+      return;
+    }
+
     this.messageService.messages(this.configService.selectedUser.id).subscribe(m => {
       this.messageService.addAll(m);
       const messages = this.messageService.getAll(this.configService.selectedUser.id);

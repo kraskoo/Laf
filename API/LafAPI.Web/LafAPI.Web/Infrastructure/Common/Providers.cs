@@ -2,6 +2,10 @@
 {
     public static class Providers
     {
+        public static string NormalizedAPIPath(this string path, string contentRootPath) =>
+            path.Replace(contentRootPath, string.Empty).Replace("\\", "/")
+                .Replace("/wwwroot", string.Empty);
+
         public static string PathToKeys(this string environment) =>
             environment == ApplicationConstants.Development ? "Logging:" : string.Empty;
 

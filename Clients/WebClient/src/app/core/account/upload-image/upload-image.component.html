@@ -1,13 +1,23 @@
 <div class="sides-25">
   <h1 class="centred-text">Upload Image Form</h1>
+  <hr />
   <form (ngSubmit)="onSubmit()" #f="ngForm" enctype="multipart/form-data">
-    <label for="file">Upload file</label>
-    <input id="file" type="file" name="file" #file="ngModel" ngModel required (change)="onChange($event)" />
-    <button type="submit"
-            mat-raised-button color="primary"
-            [disabled]="f.invalid">Upload image</button>
+    <label for="file">File to upload:</label><br />
+    <div id="file" class="fileinputs mat-raised-button mat-button-base">
+      <input type="file" class="file" name="file" accept="image/*" ngModel required (change)="onChange($event)" />
+      <div class="fakefile">
+        <img src="{{searchIcon}}" class="search-image" />
+      </div>
+      <span id="file-text">No file choosen.</span>
+    </div>
+    <!-- <input type="file" name="file" mat-raised-button class="mat-raised-button mat-button-base" id="file" #file="ngModel"
+      ngModel required (change)="onChange($event)" /> <br /><br /> -->
+    <button type="submit" mat-raised-button color="primary" [disabled]="f.invalid">Upload image</button>
   </form>
   <br />
-  <p>Becouse this is development version and the SSL certificate probably is not valid, but you may want to test it through network. You have to authorise using of unsecure connection, go to: <button mat-raised-button (click)="sendToServer()">server check</button> and give your permission once for unsecured connection. Otherwise you cannot using login form and the other components in client</p>
+  <p>Becouse this is development version and the SSL certificate probably is not valid, but you may want to test it
+    through network. You have to authorise using of unsecure connection, go to: <button mat-raised-button
+      (click)="sendToServer()">server check</button> and give your permission once for unsecured connection. Otherwise
+    you cannot using login form and the other components in client</p>
 </div>
 <spinner *ngIf="isLoading"></spinner>

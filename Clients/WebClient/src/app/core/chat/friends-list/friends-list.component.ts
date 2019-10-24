@@ -16,7 +16,7 @@ export class FriendsListComponent {
   @Input() title: string;
   @Input() list: User[];
 
-  constructor(private configService: ConfigService) { }
+  constructor(public configService: ConfigService) { }
 
   clickMenu() {
     this.configService.clickMenu();

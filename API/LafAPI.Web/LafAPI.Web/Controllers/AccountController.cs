@@ -6,6 +6,7 @@
 
     using LafAPI.Common.Mapping;
     using LafAPI.Data.Models;
+    using LafAPI.Web.Infrastructure.Common;
     using LafAPI.Web.Infrastructure.Extensions;
     using LafAPI.Web.Infrastructure.Interfaces;
     using LafAPI.Web.Infrastructure.Models;
@@ -14,6 +15,7 @@
 
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("[controller]")]
@@ -21,14 +23,17 @@
     {
         private readonly IUserFriendService userFriendService;
         private readonly IImageService imageService;
+        private readonly IWebHostEnvironment environment;
 
         public AccountController(
             IUserService userService,
             IUserFriendService userFriendService,
-            IImageService imageService) : base(userService)
+            IImageService imageService,
+            IWebHostEnvironment environment) : base(userService)
         {
             this.userFriendService = userFriendService;
             this.imageService = imageService;
+            this.environment = environment;
         }
 
         [HttpPost]
@@ -46,7 +51,7 @@
                 return this.BadRequest(result.Errors);
             }
 
-            return this.Ok();
+            return this.Ok(new { Path = path.NormalizedAPIPath(this.environment.ContentRootPath) });
         }
 
         [HttpGet]

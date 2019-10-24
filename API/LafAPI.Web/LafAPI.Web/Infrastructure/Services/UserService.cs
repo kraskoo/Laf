@@ -9,6 +9,7 @@
     using System.Threading.Tasks;
 
     using LafAPI.Data.Models;
+    using LafAPI.Web.Infrastructure.Common;
     using LafAPI.Web.Infrastructure.Extensions;
     using LafAPI.Web.Infrastructure.Interfaces;
     using LafAPI.Web.Infrastructure.Middlewares.Auth;
@@ -49,9 +50,7 @@
                 }
             }
 
-            user.AvatarPath = path.Replace(this.environment.ContentRootPath, string.Empty)
-                .Replace("\\", "/")
-                .Replace("/wwwroot", string.Empty);
+            user.AvatarPath = path.NormalizedAPIPath(this.environment.ContentRootPath);
             return await this.userManager.UpdateAsync(user);
         }
 
