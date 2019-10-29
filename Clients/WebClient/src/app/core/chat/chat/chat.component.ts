@@ -20,7 +20,7 @@ export class ChatComponent implements OnDestroy {
   currentMessage = '';
 
   constructor(
-    private configService: ConfigService,
+    public configService: ConfigService,
     private accountService: AccountService,
     private userService: UserService,
     private chatService: ChatService,

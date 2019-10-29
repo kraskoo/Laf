@@ -1,7 +1,7 @@
 <mat-grid-list cols="3" rowHeight="8%" [gutterSize]="2">
   <mat-grid-tile [colspan]="3" [rowspan]="10">
     <div class="full-size" id="chat-container" [class.mat-elevation-z2]="true" resizable [minResizableMargin]="35"
-      [minResizableWidth]="200" #chatContainer>
+      [minResizableWidth]="200" [htmlSelector]="'#chat-content'" #chatContainer>
       <div class="bottom-to-top" id="chat-content" #container></div>
     </div>
   </mat-grid-tile>
@@ -12,7 +12,8 @@
     <ng-template [ngIf]="configService.selectedUser !== null" class="message-line">
       <mat-form-field id="form-field">
         <emoji matPrefix></emoji>
-        <input matInput placeholder="Message" autocomplete="off" (keydown)="proccessMessage($event)" id="message" class="message-line">
+        <input matInput placeholder="Message" autocomplete="off" (keydown)="proccessMessage($event)" id="message"
+          class="message-line">
       </mat-form-field>
     </ng-template>
   </mat-grid-tile>

@@ -1,4 +1,6 @@
 import { Directive, ElementRef, Renderer2, AfterViewInit, Input } from '@angular/core';
+import { ConfigService } from '../services/config.service';
+
 import { functions } from '../utils/elements.util';
 
 const { getStylePropertyValue, increaseStylePropertyValue, decreaseStylePropertyValue, getScrollbarWidth } = functions;
@@ -18,10 +20,9 @@ export interface ResizableContainer {
   selector: '[resizable]'
 })
 export class ResizableDirective implements AfterViewInit {
-  // tslint:disable-next-line: no-input-rename
-  @Input('minResizableMargin') minResizableMargin: number;
-  // tslint:disable-next-line: no-input-rename
-  @Input('minResizableWidth') minResizableWidth: number;
+  @Input() minResizableMargin: number;
+  @Input() minResizableWidth: number;
+  @Input() htmlSelector: string;
 
   private resizer: ResizableContainer = {
     x: 0,
@@ -34,11 +35,13 @@ export class ResizableDirective implements AfterViewInit {
   };
   private body: HTMLElement;
   private element: HTMLElement;
+  private resizableElement: HTMLElement;
 
-  constructor(private el: ElementRef<HTMLElement>, private renderer: Renderer2) { }
+  constructor(private el: ElementRef<HTMLElement>, private renderer: Renderer2, private configService: ConfigService) { }
 
   ngAfterViewInit(): void {
     this.body = document.body;
+    this.resizableElement = document.querySelector(this.htmlSelector).parentElement;
     this.element = this.el.nativeElement;
     this.renderer.listen(this.element, 'mouseenter', () => this.mouseEnter());
     this.renderer.listen(this.element, 'mouseleave', () => this.mouseLeave());
@@ -49,12 +52,16 @@ export class ResizableDirective implements AfterViewInit {
 
   mouseEnter() {
     this.resizer.mouseInside = true;
-    this.body.style.cursor = 'e-resize';
+    this.resizableElement.style.cursor = 'e-resize';
   }
 
   mouseLeave() {
     this.resizer.mouseInside = this.resizer.mouseDown = this.resizer.canResize = false;
-    this.body.style.cursor = 'default';
+    this.resizableElement.style.cursor = 'default';
+  }
+
+  private get isOpenFriendList(): boolean {
+    return this.configService.sideNav.opened;
   }
 
   private resetValues() {
@@ -133,9 +140,11 @@ export class ResizableDirective implements AfterViewInit {
       return;
     }
 
-    this.resizer.canResize = (ev.clientX <= elementMarginLeft + 5) ||
+    const friendList = document.getElementById('friend-list');
+    const flWidth = this.isOpenFriendList && friendList ? friendList.offsetWidth : 0;
+    this.resizer.canResize = (ev.clientX <= elementMarginLeft + 5 + flWidth) ||
       (this.body.offsetWidth - ev.clientX - (elementMarginLeft + 5) - getScrollbarWidth() <= 5);
-    this.body.style.cursor = this.resizer.canResize ? 'e-resize' : 'default';
+    this.resizableElement.style.cursor = this.resizer.canResize ? 'e-resize' : 'default';
   }
 
   mouseDown(ev: MouseEvent) {
