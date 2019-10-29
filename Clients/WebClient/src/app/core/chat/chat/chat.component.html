@@ -7,10 +7,10 @@
   </mat-grid-tile>
   <mat-grid-tile [colspan]="3" [rowspan]="2" id="bottom-part">
     <ng-template [ngIf]="configService.selectedUser === null">
-      <p>Select user to chat with</p>
+      <p class="info">Select user to chat with</p>
     </ng-template>
     <ng-template [ngIf]="configService.selectedUser !== null" class="message-line">
-      <mat-form-field [style.width]="'80vw'" [style.padding]="'10px auto !important;'">
+      <mat-form-field id="form-field">
         <emoji matPrefix></emoji>
         <input matInput placeholder="Message" autocomplete="off" (keydown)="proccessMessage($event)" id="message" class="message-line">
       </mat-form-field>

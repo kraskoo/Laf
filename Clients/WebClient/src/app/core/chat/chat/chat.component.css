@@ -34,3 +34,8 @@ mat-grid-tile {
 ::ng-deep .mat-form-field-underline {
   background-color: black !important;
 }
+
+::ng-deep #form-field {
+  width: 80vw;
+  padding: 10px auto !important;
+}
