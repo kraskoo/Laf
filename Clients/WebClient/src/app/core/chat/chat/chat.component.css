@@ -26,3 +26,11 @@ mat-grid-tile {
 .mat-button-wrapper {
   padding: 11px;
 }
+
+::ng-deep label, .info {
+  color: black !important;
+}
+
+::ng-deep .mat-form-field-underline {
+  background-color: black !important;
+}
