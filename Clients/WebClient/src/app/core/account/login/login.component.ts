@@ -38,8 +38,4 @@ export class LoginComponent {
       console.log('invalid');
     }
   }
-
-  sendToServer() {
-    window.open(`${environment.url}/health`);
-  }
 }

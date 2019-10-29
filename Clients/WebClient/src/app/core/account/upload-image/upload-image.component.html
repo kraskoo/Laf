@@ -10,14 +10,7 @@
       </div>
       <span id="file-text">No file choosen.</span>
     </div>
-    <!-- <input type="file" name="file" mat-raised-button class="mat-raised-button mat-button-base" id="file" #file="ngModel"
-      ngModel required (change)="onChange($event)" /> <br /><br /> -->
     <button type="submit" mat-raised-button color="primary" [disabled]="f.invalid">Upload image</button>
   </form>
-  <br />
-  <p>Becouse this is development version and the SSL certificate probably is not valid, but you may want to test it
-    through network. You have to authorise using of unsecure connection, go to: <button mat-raised-button
-      (click)="sendToServer()">server check</button> and give your permission once for unsecured connection. Otherwise
-    you cannot using login form and the other components in client</p>
 </div>
 <spinner *ngIf="isLoading"></spinner>

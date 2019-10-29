@@ -41,8 +41,4 @@ export class RegisterComponent {
       console.log('invalid');
     }
   }
-
-  sendToServer() {
-    window.open(`${environment.url}/health`);
-  }
 }

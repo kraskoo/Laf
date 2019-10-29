@@ -58,8 +58,4 @@ export class UploadImageComponent {
   get searchIcon(): string {
     return `${environment.url}/search-image.png`;
   }
-
-  sendToServer() {
-    window.open(`${environment.url}/health`);
-  }
 }

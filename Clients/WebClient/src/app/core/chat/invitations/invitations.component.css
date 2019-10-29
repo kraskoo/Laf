@@ -28,3 +28,7 @@ mat-grid-tile, figure {
 .green {
   background-color: #388e3c;
 }
+
+#search-tile {
+	background-color: #eeeeee;
+}
