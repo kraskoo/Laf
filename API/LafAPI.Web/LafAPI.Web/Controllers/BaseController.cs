@@ -12,10 +12,8 @@
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public abstract class BaseController : ControllerBase
     {
-        protected BaseController(IUserService userService)
-        {
+        protected BaseController(IUserService userService) =>
             this.UserServices = userService;
-        }
 
         protected IUserService UserServices { get; }
 

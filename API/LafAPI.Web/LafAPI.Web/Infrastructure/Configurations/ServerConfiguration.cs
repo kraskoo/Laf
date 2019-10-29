@@ -79,7 +79,8 @@
                                     .AllowAnyMethod()
                                     .AllowAnyHeader()
                                     .AllowCredentials()
-                                    .SetPreflightMaxAge(TimeSpan.FromSeconds(2520))
+                                    .SetIsOriginAllowedToAllowWildcardSubdomains()
+                                    .SetPreflightMaxAge(TimeSpan.FromDays(1095))
                                     .Build());
                     })
                 .Configure<CookiePolicyOptions>(options =>

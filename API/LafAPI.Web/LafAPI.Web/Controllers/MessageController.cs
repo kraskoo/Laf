@@ -19,20 +19,6 @@
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Messages(FriendBindingModel model)
-        {
-            var friendId = model.FriendId;
-            var result = await this.ValidateFriend(friendId);
-            if (result != null)
-            {
-                return result;
-            }
-
-            return this.Ok(await this.messageService.GetAll(this.User.GetId(), friendId));
-        }
-
-        [HttpPost]
-        [Route("[action]")]
         public async Task<IActionResult> Create(MessageBindingModel model)
         {
             var id = this.User.GetId();
@@ -65,25 +51,6 @@
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> Edit(MessageBindingModel model)
-        {
-            var id = this.User.GetId();
-            var result = await this.ValidateFriend(model.FriendId);
-            if (result != null)
-            {
-                return result;
-            }
-
-            await this.messageService.Edit(
-                id,
-                model.FriendId,
-                model.CreationDate,
-                model.Text);
-            return this.Ok();
-        }
-
-        [HttpPost]
-        [Route("[action]")]
         public async Task<IActionResult> Delete(MessageBindingModel model)
         {
             var id = this.User.GetId();
@@ -95,6 +62,35 @@
 
             await this.messageService.Delete(id, model.FriendId, model.CreationDate);
             return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Edit(MessageBindingModel model)
+        {
+            var id = this.User.GetId();
+            var result = await this.ValidateFriend(model.FriendId);
+            if (result != null)
+            {
+                return result;
+            }
+
+            await this.messageService.Edit(id, model.FriendId, model.CreationDate, model.Text);
+            return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> Messages(FriendBindingModel model)
+        {
+            var friendId = model.FriendId;
+            var result = await this.ValidateFriend(friendId);
+            if (result != null)
+            {
+                return result;
+            }
+
+            return this.Ok(await this.messageService.GetAll(this.User.GetId(), friendId));
         }
     }
 }
