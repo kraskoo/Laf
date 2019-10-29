@@ -1,6 +1,6 @@
 <mat-grid-list cols="4" rowHeight="9.05vh">
   <mat-grid-tile colspan="4" rowspan="1" id="search-tile">
-    <form class="form" #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <form class="form" #f="ngForm" (ngSubmit)="onSubmit()">
       <mat-form-field class="full-width">
         <input type="text" matInput placeholder="Search for new friend" name="search" ngModel #search="ngModel">
         <button type="submit" matSuffix mat-icon-button matTooltip="Search ..." [matTooltipPosition]="'after'"
