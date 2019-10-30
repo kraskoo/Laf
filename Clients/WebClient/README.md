@@ -5,10 +5,14 @@
 
 ## Table of contents
 
+- [Deployed](#deployed)
 - [Installing](#installing)
 - [Starting](#starting)
 - [Author](#author)
 - [License](#license)
+
+## Deployed
+[https://lafchat.herokuapp.com](https://lafchat.herokuapp.com)	[https://lafchat.herokuapp.com](https://lafchat.herokuapp.com) (Will not work only while deploy process is running)
 
 ## Installing
 
