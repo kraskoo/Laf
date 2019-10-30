@@ -24,6 +24,7 @@
         <img src="{{avatar}}" class="avatar" />
       </button>
       <mat-menu #userMenu="matMenu">
+        <a mat-menu-item routerLink="/account/settings">Settings</a>
         <a mat-menu-item routerLink="/account/upload-image">Upload image</a>
         <button mat-menu-item (click)="logout()">Logout</button>
       </mat-menu>

@@ -1,0 +1,15 @@
+hr {
+  margin: 20px 0;
+}
+
+mat-form-field {
+  margin: 0 10%;
+  width: 80%;
+  text-align: center;
+}
+
+.slider-margin {
+  margin: 0 10%;
+  width: 80%;
+  text-align: center;
+}

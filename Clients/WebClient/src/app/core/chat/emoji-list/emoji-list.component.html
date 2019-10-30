@@ -1,0 +1,5 @@
+<mat-grid-list [cols]="cols" [rowHeight]="rowHeight">
+  <mat-grid-tile *ngFor="let e of emojis">
+    <span mat-raised-button class="emoji" (click)="copyEmoji($event)">{{e}}</span>
+  </mat-grid-tile>
+</mat-grid-list>

@@ -1,6 +1,6 @@
 <div class="container" *ngIf="isInChatRoom">
   <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #sn (sideNav)="sn" [mode]="'side'" fixedTopGap="56">
+    <mat-sidenav #sn (sideNav)="sn" [mode]="sideNavMode" fixedTopGap="56" [opened]="sideNavOpen">
       <ng-template [ngIf]="friends?.friends.length > 0">
         <chat-friends-list [title]="'Friends'" [list]="friends?.friends"
           (click)="chat.updateMessages()"></chat-friends-list>

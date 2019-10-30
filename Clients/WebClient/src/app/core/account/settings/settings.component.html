@@ -1,0 +1,20 @@
+<div class="sides-25">
+  <h2 class="centred-text">-- Chat settings --</h2>
+  <hr />
+  <mat-slide-toggle class="slider-margin centred-text" [color]="'primary'" [(checked)]="sOpenAtStart" #sOpenAtStartChecked [checked]="sOpenAtStart || !sAlwaysOpen" [disabled]="sAlwaysOpen" (change)="openAtStartOnChange($event)">
+    Sidenav(contacts) open at start page
+  </mat-slide-toggle><br /><br />
+  <mat-slide-toggle class="slider-margin centred-text" [color]="'primary'" [(checked)]="sAfterSelectUser" #sAfterSelectUserChecked [checked]="sAfterSelectUser || !sAlwaysOpen" [disabled]="sAlwaysOpen" (change)="afterSelectUserOnChange($event)">
+    After select contact close sidenav(contacts)
+  </mat-slide-toggle><br /><br />
+  <mat-slide-toggle class="slider-margin centred-text" [color]="'primary'" [(checked)]="sAlwaysOpen" [checked]="sAlwaysOpen" (change)="alwaysOpenOnChange($event)">
+    Sidenav(contacts) always open
+  </mat-slide-toggle><br /><br />
+  <mat-form-field>
+    <mat-label>Sidenav(contacts) mode</mat-label>
+    <mat-select [(value)]="sideNavMode" (selectionChange)="selectSidenavModeOnChange(sideNavMode)">
+      <mat-option [value]="mode" *ngFor="let mode of sideNavModes; let i = index">{{i + 1}}. {{mode | titlecase}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

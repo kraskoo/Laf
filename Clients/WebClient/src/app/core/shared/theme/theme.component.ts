@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ConfigStorage } from '../../services/config.service';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -7,13 +8,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./theme.component.css']
 })
 export class ThemeComponent {
+  private configStorage: ConfigStorage = new ConfigStorage();
+  private conf = 'theme';
   private theme = '';
 
   constructor() {
-    const currentTheme = localStorage.getItem('theme');
+    const currentTheme = this.configStorage.getValue(this.conf, true);
     if (!currentTheme) {
-      localStorage.setItem('theme', 'indigo-pink');
-      this.theme = 'indigo-pink';
+      this.theme = this.configStorage.setOrAddValue(this.conf, 'indigo-pink', true).getValue(this.conf, true);
     } else {
       this.theme = currentTheme;
     }
@@ -22,8 +24,7 @@ export class ThemeComponent {
   }
 
   changeTheme(theme: string): void {
-    this.theme = theme;
-    localStorage.setItem('theme', theme);
+    this.theme = this.configStorage.setOrAddValue(this.conf, theme, true).getValue(this.conf, true);
     const themeLink = document.getElementById('theme-link');
     themeLink.setAttribute('href', `/assets/themes/${theme}.css`);
   }

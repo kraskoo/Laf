@@ -39,3 +39,7 @@ mat-grid-tile {
   width: 80vw;
   padding: 10px auto !important;
 }
+
+#message {
+  color: black;
+}

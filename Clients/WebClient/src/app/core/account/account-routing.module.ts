@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
+import { SettingsComponent } from './settings/settings.component';
 import { UploadImageComponent } from './upload-image/upload-image.component';
 
 import { AnonymousGuard } from '../guards/anonymous.guard';
@@ -11,7 +12,8 @@ import { AccountGuard } from '../guards/account.guard';
 const routes: Routes = [
   { path: 'register', component: RegisterComponent, canActivate: [AnonymousGuard] },
   { path: 'login', component: LoginComponent, canActivate: [AnonymousGuard] },
-  { path: 'upload-image', component: UploadImageComponent, canActivate: [AccountGuard] }
+  { path: 'upload-image', component: UploadImageComponent, canActivate: [AccountGuard] },
+  { path: 'settings', component: SettingsComponent, canActivate: [AccountGuard] }
 ];
 
 @NgModule({
